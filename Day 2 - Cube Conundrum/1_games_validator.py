@@ -16,10 +16,10 @@ def validate_game(game):
     return game_n
 
 def get_round_map(round):
-    balls = round.split(', ')
+    cubes = round.split(', ')
     round_map = {}
-    for ball in balls:
-        v, k = ball.split(" ")
+    for cube in cubes:
+        v, k = cube.split(" ")
         round_map[k.strip()] = int(v)
     return round_map
 
