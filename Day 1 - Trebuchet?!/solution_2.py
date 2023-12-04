@@ -1,6 +1,5 @@
 import re
 
-
 def get_number(input):
     number_map = {
         "1": "1",
