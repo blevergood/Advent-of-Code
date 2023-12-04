@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# from solution_1 import get_number
-from solution_2 import get_number
+# from solution_part_1 import get_number
+from solution_part_2 import get_number
 
 def calibrate_document(document):
     f = open(document, "r")
