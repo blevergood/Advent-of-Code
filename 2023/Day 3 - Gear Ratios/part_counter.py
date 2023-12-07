@@ -49,11 +49,11 @@ def match_is_int(match: re.Match) -> bool:
 
 
 def flat_map(
-    f: Callable[[tuple, str], list], xs: Iterable[tuple[int, tuple[str]]], *argv
+    f: Callable[[tuple, str], list], xs: Iterable[tuple[int, tuple[str]]], *args: str
 ) -> list:
     ys = []
     for x in xs:
-        ys.extend(f(x, argv[0]))
+        ys.extend(f(x, args[0]))
     return ys
 
 
