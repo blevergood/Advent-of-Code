@@ -1,11 +1,11 @@
-def minimum_cubes_power(input):
+def minimum_cubes_power(input: str) -> int:
     f = open(input, "r")
     powers = [game_power(game) for game in f.readlines()]
     f.close()
     return sum(powers)
 
 
-def game_power(game):
+def game_power(game: str) -> int:
     rounds_t = game.split(": ")[1]
     rounds = [get_round_map(round) for round in rounds_t.split("; ")]
     game_minimums = get_game_minimums(rounds)
@@ -15,7 +15,7 @@ def game_power(game):
     return power
 
 
-def get_round_map(round):
+def get_round_map(round: str) -> dict[str, int]:
     cubes = round.split(", ")
     round_map = {}
     for cube in cubes:
@@ -24,7 +24,7 @@ def get_round_map(round):
     return round_map
 
 
-def get_game_minimums(rounds):
+def get_game_minimums(rounds: list[dict[str, int]]) -> dict[str, int]:
     game_minimums = {"red": 0, "green": 0, "blue": 0}
     for round in rounds:
         for key in game_minimums.keys():

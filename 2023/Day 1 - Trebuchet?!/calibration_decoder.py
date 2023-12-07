@@ -2,13 +2,13 @@
 import solution_part_1
 import solution_part_2
 
-def calibrate_document_1(document):
+def calibrate_document_1(document: str) -> int:
     f = open(document, "r")
     numbers = [solution_part_1.get_number(line) for line in f.readlines()]
     f.close()
     return sum(numbers)
 
-def calibrate_document_2(document):
+def calibrate_document_2(document: str) -> int:
     f = open(document, "r")
     numbers = [solution_part_2.get_number(line) for line in f.readlines()]
     f.close()

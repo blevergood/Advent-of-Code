@@ -1,6 +1,6 @@
 import re
 
-def get_number(input):
+def get_number(input: str) -> int:
     number_map = {
         "1": "1",
         "2": "2",
