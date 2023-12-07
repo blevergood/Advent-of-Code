@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 def validate_games(input):
     f = open(input, "r")
     games = [validate_game(game) for game in f.readlines()]
@@ -32,5 +31,5 @@ def validate_round(round, limits={"red": 12, "green": 13, "blue": 14}):
     return True
 
 
-if __name__ == "__main__":
-    print(validate_games("./puzzle input.txt"))
+
+    

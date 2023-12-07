@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 def minimum_cubes_power(input):
     f = open(input, "r")
     powers = [game_power(game) for game in f.readlines()]
@@ -32,7 +31,3 @@ def get_game_minimums(rounds):
             if round.get(key, 0) > game_minimums.get(key, 0):
                 game_minimums[key] = round.get(key, 0)
     return game_minimums
-
-
-if __name__ == "__main__":
-    print(minimum_cubes_power("./puzzle input.txt"))

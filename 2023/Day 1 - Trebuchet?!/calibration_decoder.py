@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
-# from solution_part_1 import get_number
-from solution_part_2 import get_number
+import solution_part_1
+import solution_part_2
 
-def calibrate_document(document):
+def calibrate_document_1(document):
     f = open(document, "r")
-    numbers = [get_number(line) for line in f.readlines()]
+    numbers = [solution_part_1.get_number(line) for line in f.readlines()]
+    f.close()
+    return sum(numbers)
+
+def calibrate_document_2(document):
+    f = open(document, "r")
+    numbers = [solution_part_2.get_number(line) for line in f.readlines()]
     f.close()
     return sum(numbers)
 
 
 if __name__ == "__main__":
-    print(calibrate_document("./puzzle input.txt"))
+    print("Part 1:", calibrate_document_1("./puzzle input.txt"))
+    print("Part 2:", calibrate_document_2("./puzzle input.txt"))
