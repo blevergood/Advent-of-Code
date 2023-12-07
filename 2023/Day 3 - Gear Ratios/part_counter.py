@@ -4,6 +4,7 @@
 import re
 from typing import TextIO
 from collections.abc import Iterable, Callable
+from functools import reduce
 
 
 class Coordinate:
@@ -80,6 +81,7 @@ def find_parts_and_symbols(source: TextIO) -> list:
     )
 
 
+# Part 1
 def sum_part_numbers(input: str) -> int:
     f = open(input, "r")
 
@@ -103,5 +105,34 @@ def sum_part_numbers(input: str) -> int:
     return sum(numbers)
 
 
+# Part 2
+def sum_gear_ratios(input: str) -> int:
+    f = open(input, "r")
+
+    # All symbols and numbers (non-periods)
+    all = find_parts_and_symbols(f)
+    gears = [
+        symbol for symbol in filter(lambda x: type(x) == Symbol and x.value == "*", all)
+    ]
+    gear_map = {
+        gear: [
+            part.value
+            for part in filter(
+                lambda y: type(y) == PartNumber and gear.neighbor_of(y), all
+            )
+        ]
+        for gear in gears
+    }
+
+    valid_gears = dict(filter(lambda z: len(z[1]) == 2, gear_map.items()))
+
+    gear_ratios = [
+        reduce((lambda x, y: x * y), valid_gears[key]) for key in valid_gears.keys()
+    ]
+    f.close()
+    return sum(gear_ratios)
+
+
 if __name__ == "__main__":
-    print(sum_part_numbers("./puzzle input.txt"))
+    print("Part 1:", sum_part_numbers("./puzzle input.txt"))
+    print("Part 2:", sum_gear_ratios("./puzzle input.txt"))
