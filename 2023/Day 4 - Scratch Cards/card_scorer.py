@@ -2,26 +2,28 @@
 import re
 
 
-def get_card_points(source: str) -> int:
-    scores = []
+class Card:
+    def __init__(self, line: str):
+        label, numbers = line.split(": ")
+        win, owned = numbers.split(" | ")
+        self.number = int(re.search(r"\d+", label).group())
+        self.winning_numbers = [int(n) for n in re.findall(r"\d+", win)]
+        self.owned_numbers = [int(n) for n in re.findall(r"\d+", owned)]
+        self.matches = [n for n in self.owned_numbers if n in self.winning_numbers]
+        self.score = len(self.matches)
+        # part 1
+        if self.score:
+            self.points = 2 ** (self.score - 1)
+        else:
+            self.points = self.score
 
+
+def get_card_points(source: str) -> int:
     f = open(source, "r")
     lines = f.read().split("\n")
 
-    for line in lines:
-        numbers = line.split(": ")[1]
-        winning_numbers_s, card_numbers_s = numbers.split(" | ")
-
-        winning_numbers_n = [int(n) for n in re.findall(r"\d+", winning_numbers_s)]
-        card_numbers_n = [int(n) for n in re.findall(r"\d+", card_numbers_s)]
-
-        # Assuming that we could have repeated numbers in either list, so Set Intersection won't work
-        matches = [n for n in card_numbers_n if n in winning_numbers_n]
-        if len(matches):
-            scores.append(2 ** (len(matches) - 1))
-        else:
-            # superfluous but makes it comprehensive & explicit
-            scores.append(0)
+    cards = [Card(line) for line in lines]
+    scores = [card.points for card in cards]
 
     f.close()
     return sum(scores)
