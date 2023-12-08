@@ -88,17 +88,16 @@ def sum_part_numbers(input: str) -> int:
     # All symbols and numbers (non-periods)
     all = find_parts_and_symbols(f)
 
-    # lesson learned: a filter returns a filter object and can't be used for comparison, need to unpack to a list
-    symbols = [symbol for symbol in filter(lambda x: type(x) == Symbol, all)]
+    # lesson learned: a filter returns a filter object and can't be used for comparison, need to explicitly convert to a list
+    symbols = list(filter(lambda x: type(x) == Symbol, all))
 
-    parts = [
-        part
-        for part in filter(
+    parts = list(
+        filter(
             lambda y: type(y) == PartNumber
             and any(symbol.neighbor_of(y) for symbol in symbols),
             all,
         )
-    ]
+    )
 
     numbers = [part.value for part in parts]
     f.close()
@@ -111,9 +110,7 @@ def sum_gear_ratios(input: str) -> int:
 
     # All symbols and numbers (non-periods)
     all = find_parts_and_symbols(f)
-    gears = [
-        symbol for symbol in filter(lambda x: type(x) == Symbol and x.value == "*", all)
-    ]
+    gears = list(filter(lambda x: type(x) == Symbol and x.value == "*", all))
     gear_map = {
         gear: [
             part.value
