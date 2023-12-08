@@ -19,6 +19,7 @@ class Card:
         self.copies = 1
 
 
+# Part 1
 def get_card_points(source: str) -> int:
     f = open(source, "r")
     lines = f.read().split("\n")
@@ -30,6 +31,7 @@ def get_card_points(source: str) -> int:
     return sum(scores)
 
 
+# Part 2
 def get_card_copies(source: str) -> int:
     f = open(source, "r")
     lines = f.read().split("\n")
