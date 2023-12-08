@@ -38,10 +38,8 @@ def get_card_copies(source: str) -> int:
 
     for i in range(len(cards)):
         if cards[i].score > 0:
-            j = 1
-            while j <= cards[i].score:
+            for j in range(1, cards[i].score + 1):
                 cards[i + j].copies += cards[i].copies
-                j += 1
 
     copies = [card.copies for card in cards]
     return sum(copies)
