@@ -110,6 +110,7 @@ So, the lowest location number in this example is **`35`**.
 Your puzzle answer was **`510109797`**.
 
 ## Part Two
+
 Everyone will starve if you only plant such a small number of seeds. Re-reading the almanac, it looks like the seeds: line actually describes **ranges of seed numbers**.
 
 The values on the initial seeds: line come in pairs. Within each pair, the first value is the start of the range and the second value is the length of the range. So, in the first line of the example above:
