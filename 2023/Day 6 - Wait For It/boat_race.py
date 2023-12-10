@@ -25,7 +25,8 @@ class BoatRace:
         return int(maximum) - int(minimum)
 
 
-def get_total_margin(input: str) -> list[int]:
+# Part 1
+def get_total_multi_margin(input: str) -> int:
     f = open(input, "r")
 
     times, distances = [
@@ -39,5 +40,18 @@ def get_total_margin(input: str) -> list[int]:
     return reduce((lambda x, y: x * y), num_wins)
 
 
+# Part 2
+def get_single_margin(input: str) -> int:
+    f = open(input, "r")
+    time, distance = [
+        int("".join(re.findall(r"\d+", line))) for line in f.read().split("\n")
+    ]
+    f.close()
+
+    race = BoatRace(time, distance)
+    return race.possible_wins()
+
+
 if __name__ == "__main__":
-    print("Part 1:", get_total_margin("./puzzle input.txt"))
+    print("Part 1:", get_total_multi_margin("./puzzle input.txt"))
+    print("Part 2:", get_single_margin("./puzzle input.txt"))

@@ -1,8 +1,19 @@
-## Day 6: Wait For It
+# Day 6: Wait For It
 
 The ferry quickly brings you across Island Island. After asking around, you discover that there is indeed normally a large pile of sand somewhere near here, but you don't see anything besides lots of water and the small island where the ferry has docked.
 
 As you try to figure out what to do next, you notice a poster on a wall near the ferry dock. "Boat races! Open to the public! Grand prize is an all-expenses-paid trip to **Desert Island**!" That must be where the sand comes from! Best of all, the boat races are starting in just a few minutes.
+
+## Part One
+
+_Summary: each race represents a quadratic equation of the form_ $y = x(a-x) = -x^2 + ax$
+
+_Where_ $y$ _is the "record distance" for the race,_ $a$ _is the "total race time", and_ $x$ _is both:_
+
+1. _The number of seconds you hold down a boat's button to power it, and_
+2. _The velocity of the boat after you release the button (i.e. holding the button for 1ms, the boat has a velocity of 1ml/ms for the remaining time)_
+
+_Given a file with a list of "total race times" and "record distances", find the number of ways you could hold down the power button to beat the "record time" for each race, and return the product of all of those ways_
 
 You manage to sign up as a competitor in the boat races just in time. The organizer explains that it's not really a traditional race - instead, you will get a fixed amount of time during which your boat has to travel as far as it can, and you win if your boat goes the farthest.
 
@@ -47,3 +58,29 @@ To see how much margin of error you have, determine the **number of ways you can
 Determine the number of ways you could beat the record in each race. **What do you get if you multiply these numbers together?**
 
 Your puzzle answer was **`2374848`**.
+
+## Part Two
+
+_Summary: It's the same exercise, but all of the "total race times" and "record distances" represent a single race with accidental spaces between the digits of the respective numbers. Just return the number of ways for this single race_
+
+As the race is about to start, you realize the piece of paper with race times and record distances you got earlier actually just has very bad kerning. There's really **only one race** - ignore the spaces between the numbers on each line.
+
+So, the example from before:
+
+```
+Time:      7  15   30
+Distance:  9  40  200
+```
+
+...now instead means this:
+
+```
+Time:      71530
+Distance:  940200
+```
+
+Now, you have to figure out how many ways there are to win this single race. In this example, the race lasts for **`71530` milliseconds** and the record distance you need to beat is **`940200` millimeters**. You could hold the button anywhere from `14` to `71516` milliseconds and beat the record, a total of **`71503`** ways!
+
+**How many ways can you beat the record in this one much longer race?**
+
+Your puzzle answer was **`39132886`**.
