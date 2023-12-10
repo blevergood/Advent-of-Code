@@ -10,6 +10,8 @@ You turn around to see a slightly-greasy Elf with a wrench and a look of surpris
 
 ## Part One:
 
+_Summary: Return the sum of all numbers (multi-digit) that are adjacent (above, below, left, right, diagonal) to a non-period (.) symbol from a file_
+
 The engineer explains that an engine part seems to be missing from the engine, but nobody can figure out which one. If you can **add up all the part numbers** in the engine schematic, it should be easy to work out which part is missing.
 
 The engine schematic (your puzzle input) consists of a visual representation of the engine. There are lots of numbers and symbols you don't really understand, but apparently **any number adjacent to a symbol**, even diagonally, is a "part number" and should be included in your sum. (Periods (.) do not count as a symbol.)
@@ -36,6 +38,8 @@ Of course, the actual engine schematic is much larger. **`What is the sum of all
 Your puzzle answer was **`532331`**.
 
 ## Part Two:
+
+_Summary: Find all the asterisks that are adjacent to exactly 2 numbers (multi-digit). Get the product of those two numbers and return the sum of all of those products._
 
 The engineer finds the missing part and installs it in the engine! As the engine springs to life, you jump in the closest gondola, finally ready to ascend to the water source.
 

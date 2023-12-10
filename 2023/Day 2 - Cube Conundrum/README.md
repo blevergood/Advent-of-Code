@@ -6,6 +6,12 @@ The Elf explains that you've arrived at **Snow Island** and apologizes for the l
 
 ## Part One
 
+_Summary: Given a sequence of draws of from a bag of balls of multiple colors and a maximum number of balls of each color, determine if the sequence is possible._
+
+_Sequences are given as a single line in a file, and each sequence is separated by a `;`_
+
+_Return the sum of the game ID's that are possible_
+
 As you walk, the Elf shows you a small bag and some cubes which are either red, green, or blue. Each time you play this game, he will hide a secret number of cubes of each color in the bag, and your goal is to figure out information about the number of cubes.
 
 To get information, once a bag has been loaded with cubes, the Elf will reach into the bag, grab a handful of random cubes, show them to you, and then put them back in the bag. He'll do this a few times per game.
@@ -33,6 +39,8 @@ Determine which games would have been possible if the bag had been loaded with o
 Your puzzle answer was **`2256`**.
 
 ## Part Two
+
+_Summary: Find the minimum collection_
 
 The Elf says they've stopped producing snow because they aren't getting any **water**! He isn't sure why the water stopped; however, he can show you how to get to the water source to check it out for yourself. It's just up ahead!
 

@@ -1,5 +1,7 @@
 # Day 5: If You Give A Seed A Fertilizer
 
+_Summary: Given a list of inputs and a set of mapping relationships/transformations (each effectively a piecewise equation) find the minimum output._
+
 You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.
 
 "A water source? Island Island is the water source!" You point out that Snow Island isn't receiving any water.
@@ -110,6 +112,8 @@ So, the lowest location number in this example is **`35`**.
 Your puzzle answer was **`510109797`**.
 
 ## Part Two
+
+_Find the minimum output, but you're given a range of inputs instead of a list._
 
 Everyone will starve if you only plant such a small number of seeds. Re-reading the almanac, it looks like the seeds: line actually describes **ranges of seed numbers**.
 
