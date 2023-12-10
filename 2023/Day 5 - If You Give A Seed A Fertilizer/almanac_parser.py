@@ -37,11 +37,11 @@ class AlmanacMap:
     def get_inverse(self):
         return self.mapping
 
-    def mapped_number(self, source: int) -> int:
+    def mapped_number(self, src: int) -> int:
         for k in self.mapping.keys():
-            if k.contains(source):
-                return self.mapping[k].start + (source - k.start)
-        return source
+            if k.contains(src):
+                return self.mapping[k].start + (src - k.start)
+        return src
 
     def inverted_number(self, dest: int) -> int:
         for k in self.mapping.inverse.keys():
