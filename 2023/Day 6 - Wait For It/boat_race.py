@@ -9,7 +9,7 @@ class BoatRace:
         self.time = time
         self.distance = distance
 
-    def hold_boundaries(self) -> list[int]:
+    def button_press_boundaries(self) -> list[int]:
         # Get roots of quadratic equation:
         # self.distance = hold_time * (self.time - hold_time)
         # = self.distance = -hold_time**2 + hold_time * self.time
@@ -19,7 +19,7 @@ class BoatRace:
         ]
 
     def possible_wins(self) -> int:
-        minimum, maximum = self.hold_boundaries()
+        minimum, maximum = self.button_press_boundaries()
         if maximum % 1 == 0:
             maximum -= 1
         return int(maximum) - int(minimum)
