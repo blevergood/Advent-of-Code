@@ -1,7 +1,5 @@
 # Day 5: If You Give A Seed A Fertilizer
 
-_Summary: Given a list of inputs and a set of mapping relationships/transformations (each effectively a piecewise equation) find the minimum output._
-
 You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.
 
 "A water source? Island Island is the water source!" You point out that Snow Island isn't receiving any water.
@@ -13,6 +11,12 @@ You take the boat and find the gardener right where you were told he would be: m
 You barely have time to agree to this request when he brings up another. "While you wait for the ferry, maybe you can help us with our **food production problem.** The latest Island Island Almanac just arrived and we're having trouble making sense of it."
 
 ## Part One:
+
+### Summary
+
+_Given a list of inputs and a set of mapping relationships/transformations (each effectively a piecewise equation) find the minimum output._
+
+### Problem Statement
 
 The almanac (your puzzle input) lists all of the seeds that need to be planted. It also lists what type of soil to use with each kind of seed, what type of fertilizer to use with each kind of soil, what type of water to use with each kind of fertilizer, and so on. Every type of seed, soil, fertilizer and so on is identified with a number, but numbers are reused by each category - that is, soil `123` and fertilizer `123` aren't necessarily related to each other.
 
@@ -113,7 +117,13 @@ Your puzzle answer was **`510109797`**.
 
 ## Part Two
 
+### Summary
+
 _Find the minimum output, but you're given a range of inputs instead of a list._
+
+_Note that the real challenge here is that are way too many inputs in the range to manually check each input._
+
+### Problem Statement
 
 Everyone will starve if you only plant such a small number of seeds. Re-reading the almanac, it looks like the seeds: line actually describes **ranges of seed numbers**.
 

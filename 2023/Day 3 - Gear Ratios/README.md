@@ -10,7 +10,11 @@ You turn around to see a slightly-greasy Elf with a wrench and a look of surpris
 
 ## Part One:
 
-_Summary: Return the sum of all numbers (multi-digit) that are adjacent (above, below, left, right, diagonal) to a non-period (.) symbol from a file_
+### Summary
+
+_Return the sum of all numbers (multi-digit) that are adjacent (above, below, left, right, diagonal) to a non-period (.) symbol from a file._
+
+### Problem Statement
 
 The engineer explains that an engine part seems to be missing from the engine, but nobody can figure out which one. If you can **add up all the part numbers** in the engine schematic, it should be easy to work out which part is missing.
 
@@ -39,7 +43,11 @@ Your puzzle answer was **`532331`**.
 
 ## Part Two:
 
-_Summary: Find all the asterisks that are adjacent to exactly 2 numbers (multi-digit). Get the product of those two numbers and return the sum of all of those products._
+### Summary
+
+_Find all the asterisks that are adjacent to exactly 2 numbers (multi-digit). Get the product of those two numbers and return the sum of all of those products._
+
+### Problem Statement
 
 The engineer finds the missing part and installs it in the engine! As the engine springs to life, you jump in the closest gondola, finally ready to ascend to the water source.
 

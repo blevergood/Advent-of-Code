@@ -12,11 +12,15 @@ The next thing you notice is an Elf sitting on the floor across the station in w
 
 ## Part One:
 
-_Summary: Given multiple sets of a list of "numbers you have" and a list of "winning numbers" return the sum of all of the numbers of "winning" matches that you have across each set_
+### Summary:
 
-_Each set is represented by a line in a file_
+_Given multiple sets of a list of "numbers you have" and a list of "winning numbers" return the sum of all of the numbers of "winning" matches that you have across each set._
 
-_Within each set, "numbers you have" and "winning numbers" is separated by `|`_
+_Each set is represented by a line in a file._
+
+_Within each set, "numbers you have" and "winning numbers" is separated by `|`._
+
+### Problem Statement
 
 The Elf leads you over to the pile of colorful cards. There, you discover dozens of scratchcards, all with their opaque covering already scratched off. Picking one up, it looks like each card has two lists of numbers separated by a vertical bar (`|`): a list of **winning numbers** and then a list of **numbers you have**. You organize the information into a table (your puzzle input).
 
@@ -48,9 +52,13 @@ Your puzzle answer was **`21959`**.
 
 ## Part Two
 
-_Summary: For each match within a set, create a duplicate of the next set(s) (i.e. if there are two matches, create a duplicate of each of the next two sets)_
+### Summary
 
-_Return the sum of all sets (original + duplicated)_
+_For each match within a set, create a duplicate of the next set(s) (i.e. if there are two matches, create a duplicate of each of the next two sets)._
+
+_Return the sum of all sets (original + duplicated)._
+
+### Problem Statement
 
 Just as you're about to report your findings to the Elf, one of you realizes that the rules have actually been printed on the back of every card this whole time.
 

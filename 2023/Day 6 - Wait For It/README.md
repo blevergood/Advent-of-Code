@@ -6,14 +6,18 @@ As you try to figure out what to do next, you notice a poster on a wall near the
 
 ## Part One
 
-_Summary: each race represents a quadratic equation of the form_ $y = x(a-x) = -x^2 + ax$
+### Summary
+
+_Each race represents a quadratic equation of the form_ $y = x(a-x) = -x^2 + ax$_._
 
 _Where_ $y$ _is the "record distance" for the race,_ $a$ _is the "total race time", and_ $x$ _is both:_
 
 1. _The number of seconds you hold down a boat's button to power it, and_
-2. _The velocity of the boat after you release the button (i.e. holding the button for 1ms, the boat has a velocity of 1ml/ms for the remaining time)_
+2. _The velocity of the boat after you release the button (i.e. holding the button for `1ms`, the boat has a velocity of `1ml/ms` for the remaining time)._
 
-_Given a file with a list of "total race times" and "record distances", find the number of ways you could hold down the power button to beat the "record time" for each race, and return the product of all of those ways_
+_Given a file with a list of "total race times" and corresponding "record distances", find the number of ways you could hold down the power button to beat the "record time" for each race, and return the product of all of those ways._
+
+### Problem Statement
 
 You manage to sign up as a competitor in the boat races just in time. The organizer explains that it's not really a traditional race - instead, you will get a fixed amount of time during which your boat has to travel as far as it can, and you win if your boat goes the farthest.
 
@@ -61,7 +65,13 @@ Your puzzle answer was **`2374848`**.
 
 ## Part Two
 
-_Summary: It's the same exercise, but all of the "total race times" and "record distances" represent a single race with accidental spaces between the digits of the respective numbers. Just return the number of ways for this single race_
+### Summary
+
+_It's the same exercise, but all of the "total race times" and "record distances" represent a single race with accidental spaces between the digits of the respective numbers._
+
+_Just return the number of ways you can beat the "record distance" for this single race._
+
+### Problem Statement
 
 As the race is about to start, you realize the piece of paper with race times and record distances you got earlier actually just has very bad kerning. There's really **only one race** - ignore the spaces between the numbers on each line.
 

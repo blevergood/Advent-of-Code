@@ -12,7 +12,11 @@ As they're making the final adjustments, they discover that their calibration do
 
 ## Part One
 
-_Summary: Get the first and last digit from every line in a text file to create a 2-digit number. Return the sum of the numbers from each line._
+### Summary
+
+_Get the first and last digit from every line in a text file to create a 2-digit number. Return the sum of the numbers from each line._
+
+### Problem Statement
 
 The newly-improved calibration document consists of lines of text; each line originally contained a specific **calibration value** that the Elves now need to recover. On each line, the calibration value can be found by combining the **first digit** and the **last digit** (in that order) to form a single **two-digit number**.
 
@@ -33,7 +37,11 @@ Your puzzle answer was **`53974`**.
 
 ## Part Two
 
-_Summary: spelled out digits (i.e. one, two,...) are also counted._
+### Summary
+
+_Spelled out digits (i.e. one, two,...) are also counted. If a first or last digit is spelled out, convert that digit to it's corresponding integer for composing the number from a given line and calculating the final sum._
+
+### Problem Statement
 
 Your calculation isn't quite right. It looks like some of the digits are actually **spelled out with letters**: `one`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, and `nine` **also** count as valid "digits".
 
