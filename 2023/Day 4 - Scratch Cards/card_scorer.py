@@ -48,5 +48,5 @@ def get_card_copies(source: str) -> int:
 
 
 if __name__ == "__main__":
-    print("Part 1:", get_card_points("./puzzle input.txt"))
-    print("Part 2:", get_card_copies("./puzzle input.txt"))
+    print(f"Part 1: {get_card_points('./puzzle input.txt')}")
+    print(f"Part 2: {get_card_copies('./puzzle input.txt')}")

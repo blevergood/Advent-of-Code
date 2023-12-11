@@ -63,5 +63,5 @@ def minimum_cubes_power(input: str) -> int:
 
 
 if __name__ == "__main__":
-    print("Part 1:", validate_games("./puzzle input.txt"))
-    print("Part 2", minimum_cubes_power("./puzzle input.txt"))
+    print(f"Part 1: {validate_games('./puzzle input.txt')}")
+    print(f"Part 2: {minimum_cubes_power('./puzzle input.txt')}")

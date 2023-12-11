@@ -53,5 +53,5 @@ def get_single_margin(input: str) -> int:
 
 
 if __name__ == "__main__":
-    print("Part 1:", get_total_multi_margin("./puzzle input.txt"))
-    print("Part 2:", get_single_margin("./puzzle input.txt"))
+    print(f"Part 1: {get_total_multi_margin('./puzzle input.txt')}")
+    print(f"Part 2: {get_single_margin('./puzzle input.txt')}")

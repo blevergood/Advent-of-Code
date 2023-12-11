@@ -56,5 +56,5 @@ def calibrate_document_alpha_num(document: str) -> int:
 
 
 if __name__ == "__main__":
-    print("Part 1:", calibrate_document_int("./puzzle input.txt"))
-    print("Part 2:", calibrate_document_alpha_num("./puzzle input.txt"))
+    print(f"Part 1: {calibrate_document_int('./puzzle input.txt')}")
+    print(f"Part 2: {calibrate_document_alpha_num('./puzzle input.txt')}")

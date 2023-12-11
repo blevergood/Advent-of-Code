@@ -131,5 +131,5 @@ def sum_gear_ratios(input: str) -> int:
 
 
 if __name__ == "__main__":
-    print("Part 1:", sum_part_numbers("./puzzle input.txt"))
-    print("Part 2:", sum_gear_ratios("./puzzle input.txt"))
+    print(f"Part 1: {sum_part_numbers('./puzzle input.txt')}")
+    print(f"Part 2: {sum_gear_ratios('./puzzle input.txt')}")

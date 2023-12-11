@@ -151,5 +151,5 @@ def get_closest_location(source: str, func: Callable[[str], list[int]]) -> int:
 
 
 if __name__ == "__main__":
-    print("Part 1:", get_closest_location("./puzzle input.txt", get_seeds_list))
-    print("Part 2:", get_closest_location("./puzzle input.txt", get_seeds_to_check))
+    print(f"Part 1: {get_closest_location('./puzzle input.txt', get_seeds_list)}")
+    print(f"Part 2: {get_closest_location('./puzzle input.txt', get_seeds_to_check)}")
