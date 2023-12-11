@@ -33,6 +33,8 @@ In this example, the calibration values of these four lines are `12`, `38`, `15`
 
 Consider your entire calibration document. **What is the sum of all of the calibration values?**
 
+### Solution
+
 Your puzzle answer was **`53974`**.
 
 ## Part Two
@@ -60,5 +62,7 @@ zoneight234
 In this example, the calibration values are `29`, `83`, `13`, `24`, `42`, `14`, and `76`. Adding these together produces **`281`**.
 
 **What is the sum of all of the calibration values?**
+
+### Solution
 
 Your puzzle answer was **`52840`**.

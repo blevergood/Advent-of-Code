@@ -39,6 +39,8 @@ In this schematic, two numbers are **not** part numbers because they are not adj
 
 Of course, the actual engine schematic is much larger. **`What is the sum of all of the part numbers in the engine schematic?`**
 
+### Solution
+
 Your puzzle answer was **`532331`**.
 
 ## Part Two:
@@ -77,5 +79,7 @@ Consider the same engine schematic again:
 In this schematic, there are **two** gears. The first is in the top left; it has part numbers `467` and `35`, so its gear ratio is `16345`. The second gear is in the lower right; its gear ratio is `451490`. (The `*` adjacent to `617` is **not** a gear because it is only adjacent to one part number.) Adding up all of the gear ratios produces **`467835`**.
 
 **What is the sum of all of the gear ratios in your engine schematic?**
+
+### Solution
 
 Your puzzle answer was **`82301120`**.
