@@ -16,33 +16,164 @@ class Card:
 
     def __lt__(self, other: "Card") -> bool:
         if isinstance(other, Card):
-            values = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
+            if isinstance(self, WildCard) or isinstance(other, WildCard):
+                values = [
+                    "J",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "Q",
+                    "K",
+                    "A",
+                ]
+            else:
+                values = [
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "J",
+                    "Q",
+                    "K",
+                    "A",
+                ]
             return values.index(self.label) < values.index(other.label)
         return NotImplemented
 
     def __le__(self, other: "Card") -> bool:
         if isinstance(other, Card):
-            values = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
+            if isinstance(self, WildCard) or isinstance(other, WildCard):
+                values = [
+                    "J",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "Q",
+                    "K",
+                    "A",
+                ]
+            else:
+                values = [
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "J",
+                    "Q",
+                    "K",
+                    "A",
+                ]
             return values.index(self.label) <= values.index(other.label)
         return NotImplemented
 
     def _gt_(self, other: "Card") -> bool:
         if isinstance(other, Card):
-            values = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
+            if isinstance(self, WildCard) or isinstance(other, WildCard):
+                values = [
+                    "J",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "Q",
+                    "K",
+                    "A",
+                ]
+            else:
+                values = [
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "J",
+                    "Q",
+                    "K",
+                    "A",
+                ]
             return values.index(self.label) > values.index(other.label)
         return NotImplemented
 
     def _ge_(self, other: "Card") -> bool:
         if isinstance(other, Card):
-            values = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
+            if isinstance(self, WildCard) or isinstance(other, WildCard):
+                values = [
+                    "J",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "Q",
+                    "K",
+                    "A",
+                ]
+            else:
+                values = [
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "T",
+                    "J",
+                    "Q",
+                    "K",
+                    "A",
+                ]
             return values.index(self.label) >= values.index(other.label)
         return NotImplemented
 
 
+class WildCard(Card):
+    def __init__(self, label: str) -> None:
+        super(WildCard, self).__init__(label)
+
+
 class Hand:
-    def __init__(self, cards: list[Card]) -> None:
+    def __init__(self, cards: list[Card | WildCard]) -> None:
         self.cards = cards
         self._current_index = 0
+        if any([isinstance(card, Card) for card in cards]):
+            cards = self.transform_wildcards()
         groups = [list(g) for k, g in groupby((sorted(cards)))]
         # Four of a kind OR Full House
         if len(groups) == 1:
@@ -116,8 +247,19 @@ class Hand:
                 return False
         return NotImplemented
 
+    def transform_wildcards(self) -> list[Card]:
+        normal_cards = [card for card in self.cards if not isinstance(card, WildCard)]
+        wild_cards = [card for card in self.cards if isinstance(card, WildCard)]
+        if normal_cards:
+            mode_card = max(normal_cards, key=normal_cards.count)
+            for card in wild_cards:
+                normal_cards.append(mode_card)
+            return normal_cards
+        else:
+            return wild_cards
 
-def get_total_winnings(input: str) -> int:
+
+def get_total_winnings_normal(input: str) -> int:
     f = open(input, "r")
     table = {}
     for line in f.read().split("\n"):
@@ -129,5 +271,20 @@ def get_total_winnings(input: str) -> int:
     return sum(winnings)
 
 
+def get_total_winnings_wild(input: str) -> int:
+    f = open(input, "r")
+    table = {}
+    for line in f.read().split("\n"):
+        values, bet = line.split(" ")
+        table[
+            Hand([Card(value) if value != "J" else WildCard(value) for value in values])
+        ] = int(bet)
+    sorted_hands = sorted([key for key in table.keys()])
+
+    winnings = [(i + 1) * table[sorted_hands[i]] for i in range(len(sorted_hands))]
+    return sum(winnings)
+
+
 if __name__ == "__main__":
-    print("Part 1:", get_total_winnings("puzzle input.txt"))
+    print(f"Part 1: {get_total_winnings_normal('puzzle input.txt')}")
+    print(f"Part 2: {get_total_winnings_wild('puzzle input.txt')}")
