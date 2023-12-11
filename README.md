@@ -11,9 +11,9 @@ Each day's directory contains the following:
     - The original Problem Statement from the AoC website
     - The solution for each of the two parts given my specific input
 2. A `requirements.txt` file if any external libraries are used (though I generally try to avoid this for these challenges).
-3. One or more `example.txt` file(s) with the example input from the Problem Statement. This is a simple case for the given problem and good for initial testing.
-4. A `puzzle input.txt` file with official input from the website, and upon which the solutions are based. It is my understanding that this input is different for each participant
-4. A Python file with the solution code. Executing this file will print the solution for each of the two parts for that day
+3. One or more `example.txt` file(s) with the example input from the Problem Statement. Each of these files is a simple case for the given problem and good for initial testing.
+4. A `puzzle input.txt` file with official input from the website, and upon which the solutions are based. It is my understanding that this input is different for each participant.
+5. A Python file with the solution code. Executing this file will print the solution for each of the two parts for that day.
 
 ## Notes on Approach
 - I do my best to cite any time I use ideas from others' solutions. The [AoC Subreddit](https://www.reddit.com/r/adventofcode/) is great!
