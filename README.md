@@ -15,6 +15,10 @@ Each day's directory contains the following:
 4. A `puzzle input.txt` file with official input from the website, and upon which the solutions are based. It is my understanding that this input is different for each participant
 4. A Python file with the solution code. Executing this file will print the solution for each of the two parts for that day
 
+## Notes on Approach
+- I do my best to cite any time I use ideas from others' solutions. The [AoC Subreddit](https://www.reddit.com/r/adventofcode/) is great!
+- I'm prioritizing using OOP and increasing readability over minimizing lines of code.
+
 ## AoC Information
 
 Advent of Code is created by [Eric Wastl](http://was.tl)
