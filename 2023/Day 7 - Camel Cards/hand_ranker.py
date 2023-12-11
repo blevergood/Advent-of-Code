@@ -16,6 +16,7 @@ class Card:
 
     def __lt__(self, other: "Card") -> bool:
         if isinstance(other, Card):
+            # Part 2
             if isinstance(self, WildCard) or isinstance(other, WildCard):
                 values = [
                     "J",
@@ -32,6 +33,7 @@ class Card:
                     "K",
                     "A",
                 ]
+            # Part 1
             else:
                 values = [
                     "2",
@@ -163,6 +165,7 @@ class Card:
         return NotImplemented
 
 
+# Part 2
 class WildCard(Card):
     def __init__(self, label: str) -> None:
         super(WildCard, self).__init__(label)
@@ -247,7 +250,8 @@ class Hand:
                 return False
         return NotImplemented
 
-    def transform_wildcards(self) -> list[Card]:
+    # Part 2
+    def transform_wildcards(self) -> list[Card|WildCard]:
         normal_cards = [card for card in self.cards if not isinstance(card, WildCard)]
         wild_cards = [card for card in self.cards if isinstance(card, WildCard)]
         if normal_cards:
@@ -259,6 +263,7 @@ class Hand:
             return wild_cards
 
 
+# Part 1
 def get_total_winnings_normal(input: str) -> int:
     f = open(input, "r")
     table = {}
@@ -271,6 +276,7 @@ def get_total_winnings_normal(input: str) -> int:
     return sum(winnings)
 
 
+# Part 2
 def get_total_winnings_wild(input: str) -> int:
     f = open(input, "r")
     table = {}
