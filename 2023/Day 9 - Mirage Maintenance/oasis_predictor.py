@@ -9,34 +9,29 @@ def get_readings(input: str) -> list[list[int]]:
     return numbers
 
 
-# Part 1
-def calculate_prediction(readings: list[int]) -> int:
+def calculate_extrapolation(readings: list[int], backward=False) -> int:
     if len(readings) == 0:
         return 0
+    # Part 1
+    if backward:
+        func = lambda x, y: x - y
+        target_int = 0
+    # Part 2
+    else:
+        func = lambda x, y: x + y
+        target_int = -1
     differences = [readings[i + 1] - readings[i] for i in range(len(readings) - 1)]
-    return readings[-1] + calculate_prediction(differences)
+    return func(readings[target_int], calculate_extrapolation(differences, backward))
 
 
-def get_all_predictions(input: str) -> int:
+def get_all_extrapolations(input: str, backward=False) -> int:
     all_readings = get_readings(input)
-    predictions = [calculate_prediction(readings) for readings in all_readings]
-    return sum(predictions)
-
-
-# Part 2
-def calculate_extrapolation(readings: list[int]) -> int:
-    if len(readings) == 0:
-        return 0
-    differences = [readings[i + 1] - readings[i] for i in range(len(readings) - 1)]
-    return readings[0] - calculate_extrapolation(differences)
-
-
-def get_all_extrapolations(input: str) -> int:
-    all_readings = get_readings(input)
-    extrapolations = [calculate_extrapolation(readings) for readings in all_readings]
+    extrapolations = [
+        calculate_extrapolation(readings, backward) for readings in all_readings
+    ]
     return sum(extrapolations)
 
 
 if __name__ == "__main__":
-    print(f"Part 1: {get_all_predictions('puzzle input.txt')}")
-    print(f"Part 2: {get_all_extrapolations('puzzle input.txt')}")
+    print(f"Part 1: {get_all_extrapolations('puzzle input.txt')}")
+    print(f"Part 2: {get_all_extrapolations('puzzle input.txt', backward=True)}")
