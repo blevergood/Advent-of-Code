@@ -12,11 +12,11 @@ def get_readings(input: str) -> list[list[int]]:
 def calculate_extrapolation(readings: list[int], backward=False) -> int:
     if len(readings) == 0:
         return 0
-    # Part 1
+    # Part 2
     if backward:
         func = lambda x, y: x - y
         target_int = 0
-    # Part 2
+    # Part 1
     else:
         func = lambda x, y: x + y
         target_int = -1
