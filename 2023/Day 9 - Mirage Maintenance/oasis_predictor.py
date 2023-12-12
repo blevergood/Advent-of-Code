@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 def get_readings(input: str) -> list[list[int]]:
     f = open(input, "r")
     numbers = [
