@@ -43,7 +43,7 @@ For example, here is a square loop of pipe:
 
 If the animal had entered this loop in the northwest corner, the sketch would instead look like this:
 
-<pre>
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
 .....
 .<b>S</b>-7.
 .|.|.
@@ -99,7 +99,7 @@ In the first example with the square loop:
 
 You can count the distance each tile in the loop is from the starting point like this:
 
-<pre>
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
 .....
 .012.
 .1.3.
@@ -121,7 +121,7 @@ LJ...
 
 Here are the distances for each tile on that loop:
 
-<pre>
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
 ..45.
 .236.
 01.7<b>8</b>

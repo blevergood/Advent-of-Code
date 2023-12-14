@@ -18,7 +18,7 @@ _A set of successive differences means subtracting the first element from the se
 
 _Return the overall sum of the values calculated from each individual set of successive differences_
 
-_(Please forgive the spacing of the number sequence visualizations_ :sweat_smile:_)_
+_(Please forgive the spacing of the number sequence visualizations_ :sweat*smile:*)\_
 
 ### Problem Statement
 
@@ -42,59 +42,58 @@ In the above dataset, the first history is `0 3 6 9 12 15`. Because the values i
 
 To extrapolate, start by adding a new zero to the end of your list of zeroes; because the zeroes represent differences between the two values above them, this also means there is now a placeholder in every sequence above it:
 
-<pre>
-    
-    0  3  6  9  12  15  <b>B</b>
-      3  3  3  3   3   <b>A</b>
-        0  0  0  0    <b>0</b>
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
+0  3  6  9  12  15  <b>B</b>
+  3  3  3  3   3   <b>A</b>
+    0  0  0  0    <b>0</b>
 </pre>
 
 You an then start filling in placeholders from the bottom up. `A` needs to be the result of increasing `3` (the value to its left) by `0` (the value below it); this means A must be **`3`**:
 
-<pre>
-    0  3  6  9  12  15  B
-      3  3  3  3   <b>3</b>   <b>3</b>
-        0  0  0  0    <b>0</b>    
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
+0  3  6  9  12  15  B
+  3  3  3  3   <b>3</b>   <b>3</b>
+    0  0  0  0    <b>0</b>    
 </pre>
 
 Finally, you can fill in `B`, which needs to be the result of increasing `15` (the value to its left) by `3` (the value below it), or **`18`**:
 
-<pre>
-    0  3  6  9  12  <b>15</b>  <b>18</b>
-      3  3  3  3   3   <b>3</b>
-       0  0  0  0    0
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
+0  3  6  9  12  <b>15</b>  <b>18</b>
+  3  3  3  3   3   <b>3</b>
+    0  0  0  0    0
 </pre>
 
 So, the next value of the first history is **`18`**.
 
 Finding all-zero differences for the second history requires an additional sequence:
 
-<pre>
-    1  3  6  10  15  21
-      2  3  4   5   6
-        1  1  1   1
-          0  0  0
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
+1  3  6  10  15  21
+  2  3  4   5   6
+    1  1  1   1
+      0  0  0
 </pre>
 
 Then, following the same process as before, work out the next value in each sequence from the bottom up:
 
-<pre>
-    1  3  6  10  15  21  <b>8</b>
-      2  3  4   5   6   <b>7</b>
-        1  1  1   1   <b>1</b>
-          0  0  0   <b>0</b>
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
+1  3  6  10  15  21  <b>8</b>
+  2  3  4   5   6   <b>7</b>
+    1  1  1   1   <b>1</b>
+      0  0  0   <b>0</b>
 </pre>
 
 So, the next value of the second history is **`28`**.
 
 The third history requires even more sequences, but its next value can be found the same way:
 
-<pre>
-    10  13  16  21  30  45  <b>68</b>
-       3   3  5   9   15  <b>23</b>
-        0   2  4   6    <b>8</b>
-          2  2  2   <b>2</b>
-           0  0  <b>0</b>
+<pre style="font-family: Consolas, 'Courier New', monospace; font-size: 120%;">
+10  13  16  21  30  45  <b>68</b>
+    3   3  5   9   15  <b>23</b>
+    0   2  4   6    <b>8</b>
+      2  2  2   <b>2</b>
+        0  0  <b>0</b>
 </pre>
 
 So, the next value of the third history is **`68`**.
