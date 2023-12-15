@@ -112,6 +112,7 @@ def get_seeds_to_check(line: str, maps=list[AlmanacMap]) -> list[int]:
 def get_closest_location(source: str, func: Callable[[str], list[int]]) -> int:
     f = open(source, "r")
     segments = f.read().split("\n\n")
+    f.close()
 
     arguments = [segments.pop(0)]
     maps = get_maps(segments)
@@ -146,7 +147,6 @@ def get_closest_location(source: str, func: Callable[[str], list[int]]) -> int:
         for seed in seeds
     ]
 
-    f.close()
     return min(locations)
 
 

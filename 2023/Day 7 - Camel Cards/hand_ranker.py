@@ -271,6 +271,7 @@ def get_total_winnings_normal(input: str) -> int:
         values, bet = line.split(" ")
         table[Hand([Card(value) for value in values])] = int(bet)
     sorted_hands = sorted([key for key in table.keys()])
+    f.close()
 
     winnings = [(i + 1) * table[sorted_hands[i]] for i in range(len(sorted_hands))]
     return sum(winnings)
@@ -286,6 +287,7 @@ def get_total_winnings_wild(input: str) -> int:
             Hand([Card(value) if value != "J" else WildCard(value) for value in values])
         ] = int(bet)
     sorted_hands = sorted([key for key in table.keys()])
+    f.close()
 
     winnings = [(i + 1) * table[sorted_hands[i]] for i in range(len(sorted_hands))]
     return sum(winnings)

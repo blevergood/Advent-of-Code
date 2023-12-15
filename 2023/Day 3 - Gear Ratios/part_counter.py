@@ -87,6 +87,7 @@ def sum_part_numbers(input: str) -> int:
 
     # All symbols and numbers (non-periods)
     all = find_parts_and_symbols(f)
+    f.close()
 
     # lesson learned: a filter returns a filter object and can't be used for comparison, need to explicitly convert to a list
     symbols = list(filter(lambda x: type(x) == Symbol, all))
@@ -110,6 +111,7 @@ def sum_gear_ratios(input: str) -> int:
 
     # All symbols and numbers (non-periods)
     all = find_parts_and_symbols(f)
+    f.close()
     gears = list(filter(lambda x: type(x) == Symbol and x.value == "*", all))
     gear_map = {
         gear: [

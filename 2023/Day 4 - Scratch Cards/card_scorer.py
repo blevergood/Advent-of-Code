@@ -23,11 +23,11 @@ class Card:
 def get_card_points(source: str) -> int:
     f = open(source, "r")
     lines = f.read().split("\n")
+    f.close()
 
     cards = [Card(line) for line in lines]
     scores = [card.points for card in cards]
 
-    f.close()
     return sum(scores)
 
 
@@ -35,6 +35,7 @@ def get_card_points(source: str) -> int:
 def get_card_copies(source: str) -> int:
     f = open(source, "r")
     lines = f.read().split("\n")
+    f.close()
 
     cards = [Card(line) for line in lines]
 

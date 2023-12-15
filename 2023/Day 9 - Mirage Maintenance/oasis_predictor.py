@@ -4,6 +4,7 @@ def get_readings(input: str) -> list[list[int]]:
     numbers = [
         [int(entry) for entry in data.split(" ")] for data in f.read().split("\n")
     ]
+    f.close()
     return numbers
 
 
