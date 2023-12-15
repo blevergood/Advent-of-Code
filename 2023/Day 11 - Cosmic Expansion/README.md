@@ -8,9 +8,9 @@ He doesn't know anything about the missing machine parts; he's only visiting for
 
 ### Summary
 
-_You're given a collection of strings that contain dots (`.`) and pound signs (`#`). Some lines (rows) and columns have just dots respectively. For each such line and each such column, insert another line or column respectively made up of only dots._
+_You're given a collection of strings that contain dots (`.`) and pound signs (`#`). Some lines (rows) contain only dots. The same goes for the columns. For each such line and each such column, duplicate that line or column (add another line/column of only dots)._
 
-_Calculate the distance between `#` character and every other `#` (i.e. if you have 2 `#`s, calculate 1 distance,if you have 3 `#`s, calculate 3 distances [A->B, B->C, A->C] etc.)._
+_Calculate the distance between each `#` character and every other `#` (i.e. if you have 2 `#`s, calculate 1 distance,if you have 3 `#`s, calculate 3 distances [A->B, B->C, A->C] etc.)._
 
 _The distance must be calculated moving only up/down or left/right (no diagonals). Return the sum of all of these distances._
 
@@ -117,4 +117,24 @@ In this example, after expanding the universe, the sum of the shortest path betw
 
 Expand the universe, then find the length of the shortest path between every pair of galaxies. **What is the sum of these lengths?**
 
+### Solution
+
 Your puzzle answer was **`9312968`**.
+
+## Part Two
+
+### Summary
+
+_Same as Part one except the empty columns and rows expands by 1 million times instead of 2._
+
+The galaxies are much **older** (and thus much **farther apart**) than the researcher initially estimated.
+
+Now, instead of the expansion you did before, make each empty row or column **one million** times larger. That is, each empty row should be replaced with `1000000` empty rows, and each empty column should be replaced with `1000000` empty columns.
+
+(In the example above, if each empty row or column were merely `10` times larger, the sum of the shortest paths between every pair of galaxies would be **`1030`**. If each empty row or column were merely `100` times larger, the sum of the shortest paths between every pair of galaxies would be **`8410`**. However, your universe will need to expand far beyond these values.)
+
+Starting with the same initial image, expand the universe according to these new rules, then find the length of the shortest path between every pair of galaxies. **What is the sum of these lengths?**
+
+### Solution
+
+Your puzzle answer was **`597714117556`**.
