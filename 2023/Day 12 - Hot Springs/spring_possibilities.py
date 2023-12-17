@@ -1,4 +1,4 @@
-#!/usr/bin/env python3#!/usr/bin/env python3
+#!/usr/bin/env python3
 import re
 from itertools import combinations
 from functools import cache
