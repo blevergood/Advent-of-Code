@@ -107,6 +107,7 @@ if __name__ == "__main__":
     ]
     print(f"Part 1: {sum(matches_recursive)}")
 
+    # Part 2
     matches_unfolded = [
         num_matches("?".join([rows[i]] * 5) + ".", sequences[i] * 5)
         for i in range(len(rows))
