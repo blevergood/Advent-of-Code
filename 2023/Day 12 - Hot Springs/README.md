@@ -16,6 +16,8 @@ It only takes you a few more steps to reach the main gate of the massive fenced-
 
 _Given strings comprised of `#`, `.` and `?`, as well as a list of numbers that provides the contiguous lengths of `#` sequences for each string, determine how many ways the `?` characters could be converted to `#` and `.` characters to match the contiguous-length pattern._
 
+_Return the sum of the number of possible matches for all lines._
+
 ### Problem Statement
 
 "Hello! What brings you to the hot springs today? Sorry they're not very hot right now; we're having a **lava shortage** at the moment." You ask about the missing machine parts for Desert Island.
@@ -90,3 +92,46 @@ For each row, count all of the different arrangements of operational and broken 
 ### Solution
 
 Your puzzle answer was **`8022`**.
+
+# Part Two
+
+### Summary
+
+_Multiply each string by 5, and combine each copy with a `?`. Also Multiply the pattern string by 5._
+
+_Return the sum of pattern matches._
+
+### Problem Statement
+
+As you look out at the field of springs, you feel like there are way more springs than the condition records list. When you examine the records, you discover that they were actually **folded up** this whole time!
+
+To **unfold the records**, on each row, replace the list of spring conditions with five copies of itself (separated by `?`) and replace the list of contiguous groups of damaged springs with five copies of itself (separated by `,`).
+
+So, this row:
+
+`.# 1`
+
+Would become:
+
+`.#?.#?.#?.#?.# 1,1,1,1,1
+`
+The first line of the above example would become:
+
+`???.###????.###????.###????.###????.### 1,1,3,1,1,3,1,1,3,1,1,3,1,1,3`
+
+In the above example, after unfolding, the number of possible arrangements for some rows is now much larger:
+
+`???.### 1,1,3` - **`1`** arrangement
+`.??..??...?##. 1,1,3` - **`16384`** arrangements
+`?#?#?#?#?#?#?#? 1,3,1,6` - **`1`** arrangement
+`????.#...#... 4,1,1` - **`16`** arrangements
+`????.######..#####. 1,6,5` - **`2500`** arrangements
+`?###???????? 3,2,1` - **`506250`** arrangements
+
+After unfolding, adding all of the possible arrangement counts together produces **`525152`**.
+
+Unfold your condition records; **what is the new sum of possible arrangement counts?**
+
+### Solution
+
+Your puzzle answer was **`4968620679637`**.
