@@ -4,36 +4,45 @@ import re
 
 def handle_input(input: str) -> list[str]:
     f = open(input, "r")
-    rows = f.read().split("\n")
+    grid = f.read()
     f.close()
-    return rows
+    return grid
 
 
-def move_north(rows: list[str]) -> list[list[str]]:
-    columns = list(zip(*rows))
-    sorted_columns = []
-    for column in columns:
-        segments = [list(segment) for segment in "".join(column).split("#")]
+def move(grid: str, direction: str) -> str:
+    # column sorting
+    rows = grid.split("\n")
+    if direction in ["north", "south"]:
+        arrays = list(zip(*rows))
+        reversed = direction == "north"
+    else:
+        arrays = [tuple(row) for row in rows]
+        reversed = direction == "west"
+    sorted_arrays = []
+    for array in arrays:
+        segments = [list(segment) for segment in "".join(array).split("#")]
         for segment in segments:
-            segment.sort(reverse=True)
-        sorted_column = []
+            segment.sort(reverse=reversed)
+        sorted_array = []
         for i in range(len(segments)):
             if segments[i]:
-                sorted_column.extend(segments[i])
+                sorted_array.extend(segments[i])
                 # Make sure that we don't add an extra "#" at the end of the column
-                if i < len(segments) - 1:
-                    sorted_column.append("#")
-            else:
-                if i < len(segments) - 1:
-                    # Because of using split(), empty lists represent "#" characters
-                    sorted_column.append("#")
-        sorted_columns.append(sorted_column)
-    return sorted_columns
+            if i < len(segments) - 1:
+                sorted_array.append("#")
+        sorted_arrays.append(sorted_array)
+    # Maintain string stucture
+    if direction in ["north", "south"]:
+        sorted_grid = "\n".join(["".join(array) for array in (zip(*sorted_arrays))])
+    else:
+        sorted_grid = "\n".join(["".join(array) for array in sorted_arrays])
+    return sorted_grid
 
 
-def calculate_load(sorted_columns: list[list[str]]) -> int:
+def calculate_load(sorted_grid: str) -> int:
     pattern = r"[O]"
     load = 0
+    sorted_columns = list(zip(*sorted_grid.split("\n")))
     for column in sorted_columns:
         # reverse it because "O"s at the "top" is has most load
         for match in re.finditer(pattern, "".join(reversed(column))):
@@ -42,5 +51,5 @@ def calculate_load(sorted_columns: list[list[str]]) -> int:
 
 
 if __name__ == "__main__":
-    rows = handle_input("puzzle input.txt")
-    print(f"Part 1: {calculate_load(move_north(rows))}")
+    grid = handle_input("example.txt")
+    print(f"Part 1: {calculate_load(move(grid, 'north'))}")
