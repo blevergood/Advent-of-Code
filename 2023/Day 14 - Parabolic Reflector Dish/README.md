@@ -80,3 +80,73 @@ Tilt the platform so that the rounded rocks all roll north. Afterward, **what is
 ### Solution
 
 Your puzzle answer was **`105461`**.
+
+## Part Two
+
+### Summary
+
+_Same mechanics (movement/scoring) as before, but move the `O` characters around in multiple directions to create a "cycle"._
+
+_Each "cycle" moves the `O` characters in this order: up, left, down, right (North, West, East, South)._
+
+_"Cycle" the `O` characters `1000000000` times, then calculate weight as in Part 1. Return the final weight value._
+
+### Problem Statement
+
+The parabolic reflector dish deforms, but not in a way that focuses the beam. To do that, you'll need to move the rocks to the edges of the platform. Fortunately, a button on the side of the control panel labeled "**spin cycle**" attempts to do just that!
+
+Each cycle tilts the platform four times so that the rounded rocks roll **north**, then **west**, then **south**, then **east**. After each tilt, the rounded rocks roll as far as they can before the platform tilts in the next direction. After one cycle, the platform will have finished rolling the rounded rocks in those four directions in that order.
+
+Here's what happens in the example above after each of the first few cycles:
+
+```
+After 1 cycle:
+.....#....
+....#...O#
+...OO##...
+.OO#......
+.....OOO#.
+.O#...O#.#
+....O#....
+......OOOO
+#...O###..
+#..OO#....
+```
+
+```
+After 2 cycles:
+.....#....
+....#...O#
+.....##...
+..O#......
+.....OOO#.
+.O#...O#.#
+....O#...O
+.......OOO
+#..OO###..
+#.OOO#...O
+```
+
+```
+After 3 cycles:
+.....#....
+....#...O#
+.....##...
+..O#......
+.....OOO#.
+.O#...O#.#
+....O#...O
+.......OOO
+#...O###.O
+#.OOO#...O
+```
+
+This process should work if you leave it running long enough, but you're still worried about the north support beams. To make sure they'll survive for a while, you need to calculate the **total load** on the north support beams after `1000000000` cycles.
+
+In the above example, after `1000000000` cycles, the total load on the north support beams is 64.
+
+Run the spin cycle for `1000000000` cycles. Afterward, **what is the total load on the north support beams?**
+
+### Solution
+
+Your puzzle answer was **`102829`**.
