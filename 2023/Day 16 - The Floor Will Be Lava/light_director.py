@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+from copy import deepcopy
+
+
 class Tile:
     def __init__(
         self, value: str, x: int, y: int, grid_pos: str, energized=False
@@ -39,17 +42,21 @@ class Floor:
                     x_pos = "right"
                 else:
                     x_pos = "mid"
-                if i == 0 and j == 0:
-                    energized = True
-                else:
-                    energized = False
-                current_row.append(
-                    Tile(tiles_str[i][j], j, i, y_pos + x_pos, energized)
-                )
+                current_row.append(Tile(tiles_str[i][j], j, i, y_pos + x_pos, False))
             self.tiles.append(current_row)
 
     def tileAt(self, x, y):
         return self.tiles[y][x]
+
+    def get_border(self):
+        border_coords = set()
+        for y in range(self.height):
+            if y == 0 or y == self.height - 1:
+                for x in range(self.width):
+                    border_coords.add((x, y))
+            else:
+                border_coords.update([(0, y), (self.width - 1, y)])
+        return border_coords
 
     def get_energized(self):
         energized_tiles = []
@@ -60,7 +67,7 @@ class Floor:
         return energized_tiles
 
 
-class Light:
+class Beam:
     def __init__(self, floor: Floor, x: int, y: int, direction: str) -> None:
         self.x = x
         self.y = y
@@ -68,8 +75,15 @@ class Light:
         self.direction = direction
         self.current_tile = self.floor.tileAt(self.x, self.y)
         self.current_tile.energized = True
-        self.done = False
-        self.split = ""
+        if self.current_tile.value == "|" and self.direction in ["left", "right"]:
+            self.split = "vertical"
+            self.done = True
+        elif self.current_tile.value == "-" and self.direction in ["up", "down"]:
+            self.split = "horizontal"
+            self.done = True
+        else:
+            self.split = ""
+            self.done = False
 
     def move_right(self):
         if "right" not in self.current_tile.grid_pos:
@@ -127,16 +141,15 @@ def handle_input(input: str) -> list[list[str]]:
     return tiles_str
 
 
-def traverse_floor(floor):
+def traverse_floor(floor, start=(0, 0), direction="right"):
+    trav_floor = deepcopy(floor)
     # Need to account for if the first tile itself is a mirror
-    if floor.tileAt(0, 0).value in ["/", "\\"]:
-        direction = floor.tileAt(0, 0).turns["right"]
-    elif floor[0][0].value == "|":
-        direction = "down"
-    beams = [Light(floor, 0, 0, direction)]
+    if trav_floor.tileAt(*start).value in ["/", "\\"]:
+        direction = trav_floor.tileAt(*start).turns[direction]
+    beams = [Beam(trav_floor, *start, direction)]
     visited: set[Tile] = set()
     visited_dir: set[tuple[str, Tile]] = set()
-    while beams and len(visited) < floor.size:
+    while beams and len(visited) < trav_floor.size:
         beam = beams.pop(0)
         while not beam.done and (beam.direction, beam.current_tile) not in visited_dir:
             visited.add(beam.current_tile)
@@ -145,22 +158,40 @@ def traverse_floor(floor):
         if beam.split == "horizontal":
             beams.extend(
                 [
-                    Light(floor, beam.x, beam.y, "left"),
-                    Light(floor, beam.x, beam.y, "right"),
+                    Beam(trav_floor, beam.x, beam.y, "left"),
+                    Beam(trav_floor, beam.x, beam.y, "right"),
                 ]
             )
         elif beam.split == "vertical":
             beams.extend(
                 [
-                    Light(floor, beam.x, beam.y, "up"),
-                    Light(floor, beam.x, beam.y, "down"),
+                    Beam(trav_floor, beam.x, beam.y, "up"),
+                    Beam(trav_floor, beam.x, beam.y, "down"),
                 ]
             )
-    return floor
+    return trav_floor
 
 
 if __name__ == "__main__":
-    tiles_str = handle_input("puzzle input.txt")
+    tiles_str = handle_input("example.txt")
     floor = Floor(tiles_str)
     energized_floor = traverse_floor(floor)
     print(f"Part 1: {len(energized_floor.get_energized())}")
+
+    border_coords = floor.get_border()
+
+    energized_opts = []
+    for coords in border_coords:
+        if "top" in floor.tileAt(*coords).grid_pos:
+            energized_opts.append(traverse_floor(floor, coords, "down").get_energized())
+        elif "bottom" in floor.tileAt(*coords).grid_pos:
+            energized_opts.append(traverse_floor(floor, coords, "up").get_energized())
+        # Separate if statements so that two beams are created for corner tiles
+        if "left" in floor.tileAt(*coords).grid_pos:
+            energized_opts.append(
+                traverse_floor(floor, coords, "right").get_energized()
+            )
+        elif "right" in floor.tileAt(*coords).grid_pos:
+            energized_opts.append(traverse_floor(floor, coords, "left").get_energized())
+
+    print(f"Part 2: {max([len(opt) for opt in energized_opts])}")
