@@ -4,7 +4,7 @@ from copy import deepcopy
 
 class Tile:
     def __init__(
-        self, value: str, x: int, y: int, grid_pos: str, energized=False
+        self, value: str, x: int, y: int, grid_pos: str, energized: bool = False
     ) -> None:
         self.value = value
         self.x = x
@@ -45,10 +45,10 @@ class Floor:
                 current_row.append(Tile(tiles_str[i][j], j, i, y_pos + x_pos, False))
             self.tiles.append(current_row)
 
-    def tileAt(self, x, y):
+    def tileAt(self, x: int, y: int) -> Tile:
         return self.tiles[y][x]
 
-    def get_border(self):
+    def get_border(self) -> set(tuple[int, int]):
         border_coords = set()
         for y in range(self.height):
             if y == 0 or y == self.height - 1:
@@ -58,7 +58,7 @@ class Floor:
                 border_coords.update([(0, y), (self.width - 1, y)])
         return border_coords
 
-    def get_energized(self):
+    def get_energized(self) -> list[Tile]:
         energized_tiles = []
         for row in self.tiles:
             for tile in row:
@@ -85,23 +85,23 @@ class Beam:
             self.split = ""
             self.done = False
 
-    def move_right(self):
+    def move_right(self) -> None:
         if "right" not in self.current_tile.grid_pos:
             self.x += 1
 
-    def move_left(self):
+    def move_left(self) -> None:
         if "left" not in self.current_tile.grid_pos:
             self.x -= 1
 
-    def move_up(self):
+    def move_up(self) -> None:
         if "top" not in self.current_tile.grid_pos:
             self.y -= 1
 
-    def move_down(self):
+    def move_down(self) -> None:
         if "bottom" not in self.current_tile.grid_pos:
             self.y += 1
 
-    def move(self):
+    def move(self) -> None:
         options = {
             "right": self.move_right,
             "left": self.move_left,
@@ -141,7 +141,11 @@ def handle_input(input: str) -> list[list[str]]:
     return tiles_str
 
 
-def traverse_floor(floor, start=(0, 0), direction="right"):
+def traverse_floor(
+    floor: Floor,
+    start: tuple[int, int] = (0, 0),
+    direction: str = "right",
+) -> Floor:
     trav_floor = deepcopy(floor)
     # Need to account for if the first tile itself is a mirror
     if trav_floor.tileAt(*start).value in ["/", "\\"]:
@@ -173,7 +177,7 @@ def traverse_floor(floor, start=(0, 0), direction="right"):
 
 
 if __name__ == "__main__":
-    tiles_str = handle_input("example.txt")
+    tiles_str = handle_input("puzzle input.txt")
     floor = Floor(tiles_str)
     energized_floor = traverse_floor(floor)
     print(f"Part 1: {len(energized_floor.get_energized())}")
@@ -194,4 +198,6 @@ if __name__ == "__main__":
         elif "right" in floor.tileAt(*coords).grid_pos:
             energized_opts.append(traverse_floor(floor, coords, "left").get_energized())
 
+    # This takes about a minute to complete
+    # TODO: implement a tiered caching mechanism
     print(f"Part 2: {max([len(opt) for opt in energized_opts])}")
