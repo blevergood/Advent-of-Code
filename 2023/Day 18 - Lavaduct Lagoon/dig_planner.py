@@ -1,55 +1,44 @@
 #!/usr/bin/env python3
-def handle_input(input: str) -> list[tuple[str, int, str]]:
+def handle_input(input: str, part_2: bool = False) -> list[tuple[str, int, str]]:
     f = open(input, "r")
     dig_steps = f.read().split("\n")
     dig_plan = []
     for step in dig_steps:
-        direction, distance, color = step.split(" ")
-        dig_plan.append((direction, int(distance), color[1:-1]))
+        if not part_2:
+            direction, distance = step.split(" ")[:2]
+        else:
+            direction_converter = ["R", "D", "L", "U"]
+            # last item of the list, strip `(`, `#`, and `)`
+            code = step.split(" ")[-1][2:-1]
+            direction, distance = direction_converter[int(code[-1])], int(code[:-1], 16)
+        dig_plan.append((direction, int(distance)))
     return dig_plan
 
 
 def get_lagoon_points(
     dig_plan: list[tuple[str, int, str]]
-) -> list[tuple[int, int, str]]:
+) -> (list[tuple[int, int]], int):
     plan_dispatch = {
         "R": lambda x, y, distance: (x + distance, y),
-        "L": lambda x, y, distance: (x - distance, y),
         "D": lambda x, y, distance: (x, y + distance),
+        "L": lambda x, y, distance: (x - distance, y),
         "U": lambda x, y, distance: (x, y - distance),
     }
-    previous_coords = (0, 0, "")
+    previous_coords = (0, 0)
     lagoon_points = [previous_coords]
+    border_size = 1
     for step in dig_plan:
         current_coords = plan_dispatch[step[0]](*previous_coords[:2], step[1])
-        current_coords += (step[2],)
         if previous_coords[0] == current_coords[0]:
-            if previous_coords[1] < current_coords[1]:
-                intermediate_points = [
-                    (current_coords[0], previous_coords[1] + i, current_coords[2])
-                    for i in range(1, current_coords[1] - previous_coords[1])
-                ]
-            elif previous_coords[1] > current_coords[1]:
-                intermediate_points = [
-                    (current_coords[0], previous_coords[1] - i, current_coords[2])
-                    for i in range(1, previous_coords[1] - current_coords[1])
-                ]
+            border_size += abs(previous_coords[1] - current_coords[1])
         elif previous_coords[1] == current_coords[1]:
-            if previous_coords[0] < current_coords[0]:
-                intermediate_points = [
-                    (previous_coords[0] + i, current_coords[1], current_coords[2])
-                    for i in range(1, current_coords[0] - previous_coords[0])
-                ]
-            elif previous_coords[0] > current_coords[0]:
-                intermediate_points = [
-                    (previous_coords[0] - i, current_coords[1], current_coords[2])
-                    for i in range(1, previous_coords[0] - current_coords[0])
-                ]
-        lagoon_points.extend(intermediate_points)
-        if current_coords[:2] != (0, 0):
+            border_size += abs(previous_coords[0] - current_coords[0])
+        if current_coords != (0, 0):
             lagoon_points.append(current_coords)
+        else:
+            border_size -= 1
         previous_coords = current_coords
-    return lagoon_points
+    return lagoon_points, border_size
 
 
 # Shoelace/Guass's area formula: https://en.wikipedia.org/wiki/Shoelace_formula
@@ -82,16 +71,20 @@ def get_interior_points(area: int, boundary_points: int) -> int:
 
 
 if __name__ == "__main__":
-    dig_plan = handle_input("puzzle input.txt")
-    # For part 1, we can track the diff's for number of points, rather than generating all of the points and counting
-    # Keeping it for now bc I assume the color will come into play
-
+    input = "puzzle input.txt"
+    # Part 1
+    dig_plan_1 = handle_input(input)
     # boundary points
-    lagoon_points = get_lagoon_points(dig_plan)
-
+    lagoon_points_1, border_size_1 = get_lagoon_points(dig_plan_1)
     # Area based on shoelace formula, see Day 10
-    lagoon_area = get_area([lagoon_point[:2] for lagoon_point in lagoon_points])
+    lagoon_area_1 = get_area([lagoon_point for lagoon_point in lagoon_points_1])
     # Distinct points based on area and number of boundary points (also Day 10)
-    int_points = get_interior_points(lagoon_area, len(lagoon_points))
+    int_points_1 = get_interior_points(lagoon_area_1, border_size_1)
+    print(f"Part 1: {int(border_size_1 + int_points_1)}")
 
-    print(f"Part 1: {int(len(lagoon_points) + int_points)}")
+    # Part 2
+    dig_plan_2 = handle_input(input, True)
+    lagoon_points_2, border_size_2 = get_lagoon_points(dig_plan_2)
+    lagoon_area_2 = get_area([lagoon_point for lagoon_point in lagoon_points_2])
+    int_points_2 = get_interior_points(lagoon_area_2, border_size_2)
+    print(f"Part 2: {int(border_size_2 + int_points_2)}")
