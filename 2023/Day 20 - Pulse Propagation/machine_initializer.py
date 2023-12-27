@@ -258,33 +258,11 @@ def get_rx_activation_cycles(network: Network) -> int:
 
 
 if __name__ == "__main__":
-    start_1 = time()
-    start_sys_1 = process_time()
     network_1 = Network(handle_input("puzzle input.txt"))
     network_1.run_cycles(1000)
-
     recorded_pulses = network_1.get_all_pulses()
-
-    end_1 = time()
-    end_sys_1 = process_time()
-    wall_time_1 = end_1 - start_1
-    sys_time_1 = end_sys_1 - start_sys_1
-
     print(f"Part 1: {recorded_pulses}")
-    print(f"Wall time: {wall_time_1:.2f} seconds")
-    print(f"System time: {sys_time_1:.2f} seconds")
 
-    start_2 = time()
-    start_sys_2 = process_time()
     network_2 = Network(handle_input("puzzle input.txt"))
-
     min_cycles = get_rx_activation_cycles(network_2)
-
-    end_2 = time()
-    end_sys_2 = process_time()
-    wall_time_2 = end_2 - start_2
-    sys_time_2 = end_sys_2 - start_sys_2
-
     print(f"Part 2: {min_cycles}")
-    print(f"Wall time: {wall_time_2:.2f} seconds")
-    print(f"System time: {sys_time_2:.2f} seconds")
