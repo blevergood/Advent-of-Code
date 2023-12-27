@@ -159,4 +159,24 @@ In the second example, after pushing the button `1000` times, `4250` low pulses 
 
 Consult your module configuration; determine the number of low pulses and high pulses that would be sent after pushing the button 1000 times, waiting for all pulses to be fully handled after each push of the button. **What do you get if you multiply the total number of low pulses sent by the total number of high pulses sent?**
 
+### Solution
+
 Your puzzle answer was **`867118762`**.
+
+## Part Two
+
+### Summary
+
+_You need to activate the `rx` module by sending it a single `low` input. It is connected to a `Conjunction` module. Figure out the minimum number of cycles cycles required to activate the `rx` module._
+
+_Return this number of cycles_
+
+### Problem Statement
+
+The final machine responsible for moving the sand down to Island Island has a module attached named `rx`. The machine turns on when a **single low pulse** is sent to rx.
+
+Reset all modules to their default states. Waiting for all pulses to be fully handled after each button press, **what is the fewest number of button presses required to deliver a single low pulse to the module named rx?**
+
+### Solution
+
+Your puzzle answer was **`217317393039529`**.

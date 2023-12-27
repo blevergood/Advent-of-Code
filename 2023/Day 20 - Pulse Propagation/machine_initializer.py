@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+from math import lcm
+from time import time, process_time
+
+
 class Event:
     def __init__(self, payload, src: "Module", dest: "Module"):
         self.payload = payload
@@ -121,6 +125,19 @@ class Button(Module):
         return self.pulses_sent
 
 
+class Output(Module):
+    def __init__(
+        self, name: str, outputs: list[Module], inputs: list[Module] = None
+    ) -> None:
+        if inputs == None:
+            inputs = []
+        self.inputs = inputs
+        super().__init__(name, outputs)
+
+    def add_inputs(self, inputs):
+        self.inputs.extend(list(inputs))
+
+
 class Network:
     def __init__(self, module_input: dict[str, list[str]]) -> None:
         self.modules: list[Module] = []
@@ -141,8 +158,10 @@ class Network:
             idx[key] = len(self.modules) - 1
         # Go back through and associate outputs and inputs to nodes
         #  Doing it this way to avoid having duplicate entries -> just pointing to the single instances of objects
-        conj_inputs = {
-            module: [] for module in self.modules if type(module) == Conjunction
+        need_inputs = {
+            module: []
+            for module in self.modules
+            if type(module) == Conjunction or type(module) == Output
         }
         for key in module_input.keys():
             current_module = self.modules[idx[key]]
@@ -156,15 +175,16 @@ class Network:
             ]
             if len(extra_outputs) > 0:
                 for output in extra_outputs:
-                    mod = Module(output, [])
+                    mod = Output(output, [])
                     self.modules.append(mod)
                     current_outputs.append(mod)
+                    need_inputs[mod] = []
             current_module.add_outputs(current_outputs)
             for output in current_outputs:
-                if type(output) == Conjunction:
-                    conj_inputs[output].append(current_module)
-        for key in conj_inputs.keys():
-            key.add_inputs(conj_inputs[key])
+                if type(output) == Conjunction or type(output) == Output:
+                    need_inputs[output].append(current_module)
+        for key in need_inputs.keys():
+            key.add_inputs(need_inputs[key])
         self.broadcaster = [mod for mod in self.modules if type(mod) == Broadcaster][0]
         self.button = Button(self.broadcaster)
         self.event_queue = Module.event_queue
@@ -208,10 +228,63 @@ def handle_input(input: str) -> dict[str, list[str]]:
     return module_config
 
 
+# Part 2
+# Idea from: https://www.reddit.com/r/adventofcode/comments/18mmfxb/comment/ke5sgxs/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+def get_rx_activation_cycles(network: Network) -> int:
+    # There are 4 distinct chains of FlipFlop modules connecting to end Conjunction modules
+    # Because of this, they act like binary counters and you can figure out the state of the binary chain required to have the last bit be a `1`
+    # Get all of these chains, convert to int and get LCM of these conditions.
+    broadcaster = network.broadcaster
+    chain_values = []
+    for mod in broadcaster.outputs:
+        current_mod = mod
+        chain = ""
+        # FlipFlops that connect to Conjunction modules need to be `1`. Otherwise, they don't. Set them to 0 to get the lowest possible value
+        while current_mod is not None and len(current_mod.outputs) > 0:
+            if len(current_mod.outputs) == 2 or Conjunction in [
+                type(mod) for mod in current_mod.outputs
+            ]:
+                chain = "1" + chain
+            else:
+                chain = "0" + chain
+            next_ff = [mod for mod in current_mod.outputs if type(mod) == FlipFlop]
+            if len(next_ff) > 0:
+                current_mod = next_ff[0]
+            else:
+                current_mod = None
+        chain_values.append(chain)
+    cycles = [int(chain, 2) for chain in chain_values]
+    return lcm(*cycles)
+
+
 if __name__ == "__main__":
-    event_queue = Module.event_queue
-    process_event_queue = Module.process_event_queue
-    network = Network(handle_input("puzzle input.txt"))
-    network.run_cycles(1000)
-    recorded_pulses = network.get_all_pulses()
+    start_1 = time()
+    start_sys_1 = process_time()
+    network_1 = Network(handle_input("puzzle input.txt"))
+    network_1.run_cycles(1000)
+
+    recorded_pulses = network_1.get_all_pulses()
+
+    end_1 = time()
+    end_sys_1 = process_time()
+    wall_time_1 = end_1 - start_1
+    sys_time_1 = end_sys_1 - start_sys_1
+
     print(f"Part 1: {recorded_pulses}")
+    print(f"Wall time: {wall_time_1:.2f} seconds")
+    print(f"System time: {sys_time_1:.2f} seconds")
+
+    start_2 = time()
+    start_sys_2 = process_time()
+    network_2 = Network(handle_input("puzzle input.txt"))
+
+    min_cycles = get_rx_activation_cycles(network_2)
+
+    end_2 = time()
+    end_sys_2 = process_time()
+    wall_time_2 = end_2 - start_2
+    sys_time_2 = end_sys_2 - start_sys_2
+
+    print(f"Part 2: {min_cycles}")
+    print(f"Wall time: {wall_time_2:.2f} seconds")
+    print(f"System time: {sys_time_2:.2f} seconds")
