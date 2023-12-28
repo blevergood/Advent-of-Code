@@ -80,7 +80,7 @@ def get_quadratic(points: list[int]) -> Callable:
     return lambda x: (a * x**2) + (b * x) + c
 
 
-def get_infinite_grid_tiles(grid, start, goal):
+def get_infinite_grid_tiles(grid: list[str], start: tuple[int, int], goal: int) -> int:
     X = len(grid)
     S = X // 2
 
