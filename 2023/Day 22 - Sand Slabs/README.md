@@ -154,7 +154,7 @@ Figure how the blocks will settle based on the snapshot. Once they've settled, c
 
 Your puzzle answer was **`501`**.
 
-# Part Two
+## Part Two
 
 ### Summary
 
@@ -168,11 +168,13 @@ You'll need to figure out the best brick to disintegrate. For each brick, determ
 
 Using the same example as above:
 
-- Disintegrating brick A would cause all **`6`** other bricks to fall.
-- Disintegrating brick F would cause only **`1`** other brick, G, to fall.
+- Disintegrating brick `A` would cause all **`6`** other bricks to fall.
+- Disintegrating brick `F` would cause only **`1`** other brick, G, to fall.
 
 Disintegrating any other brick would cause **no other bricks** to fall. So, in this example, the sum of **the number of other bricks that would fall** as a result of disintegrating each brick is **`7`**.
 
 For each brick, determine how many **other bricks** would fall if that brick were disintegrated. **What is the sum of the number of other bricks that would fall?**
+
+### Solution
 
 Your puzzle answer was **`80948`**.
