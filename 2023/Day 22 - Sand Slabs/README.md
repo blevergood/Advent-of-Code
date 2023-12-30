@@ -20,6 +20,8 @@ _Some additional notes:_
 
 _Once you determine how the blocks will fall, get the number of blocks with more than one supporting block directly underneath it. Return this number._
 
+### Problem Statement
+
 The sand has been falling as large compacted bricks of sand, piling up to form an impressive stack here near the edge of Island Island. In order to make use of the sand to filter water, some of the bricks will need to be broken apart - nay, **disintegrated** - back into freely flowing sand.
 
 The stack is tall enough that you'll have to be careful about choosing which bricks to disintegrate; if you disintegrate the wrong brick, large portions of the stack could topple, which sounds pretty dangerous.
@@ -148,4 +150,29 @@ So, in this example, **`5`** bricks can be safely disintegrated.
 
 Figure how the blocks will settle based on the snapshot. Once they've settled, consider disintegrating a single brick; **how many bricks could be safely chosen as the one to get disintegrated?**
 
+### Solution
+
 Your puzzle answer was **`501`**.
+
+# Part Two
+
+### Summary
+
+_Figure out how many bricks would fall if you removed/disintegrated. Return the sum of these outcomes._
+
+### Problem Statement
+
+Disintegrating bricks one at a time isn't going to be fast enough. While it might sound dangerous, what you really need is a **chain reaction**.
+
+You'll need to figure out the best brick to disintegrate. For each brick, determine how many other **bricks would fall** if that brick were disintegrated.
+
+Using the same example as above:
+
+- Disintegrating brick A would cause all **`6`** other bricks to fall.
+- Disintegrating brick F would cause only **`1`** other brick, G, to fall.
+
+Disintegrating any other brick would cause **no other bricks** to fall. So, in this example, the sum of **the number of other bricks that would fall** as a result of disintegrating each brick is **`7`**.
+
+For each brick, determine how many **other bricks** would fall if that brick were disintegrated. **What is the sum of the number of other bricks that would fall?**
+
+Your puzzle answer was **`80948`**.
