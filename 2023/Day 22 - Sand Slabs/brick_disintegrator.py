@@ -1,124 +1,100 @@
 #!/usr/bin/env python3
-from collections import namedtuple
-from collections.abc import Generator
-from dataclasses import dataclass
-
-Cube = namedtuple("Cube", ["x", "y", "z"])
-
-
-# https://www.reddit.com/r/adventofcode/comments/18o7014/comment/kexg58r/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-@dataclass
-class Brick:
-    start: Cube
-    end: Cube
-    brick_id: int
-
-
-def get_cubes(bricks: list[Brick], brick_id: int) -> Generator[Cube]:
-    brick = bricks[brick_id]
-    if brick.start.x != brick.end.x:
-        for x in range(
-            min(brick.start.x, brick.end.x), max(brick.start.x, brick.end.x) + 1
-        ):
-            yield (x, brick.start.y, brick.start.z)
-    elif brick.start.y != brick.end.y:
-        for y in range(
-            min(brick.start.y, brick.end.y), max(brick.start.y, brick.end.y) + 1
-        ):
-            yield (brick.start.x, y, brick.start.z)
-    # Will create a 1-cube brick if z isn't different
-    else:
-        for z in range(
-            min(brick.start.z, brick.end.z), max(brick.start.z, brick.end.z) + 1
-        ):
-            yield (brick.start.x, brick.start.y, z)
-
-
-def is_falling(
-    grid: dict[tuple[int, int, int], int],
-    bricks: list[Brick],
-    brick: Brick,
-    check_brick_id: int = -1,
-):
-    if brick.brick_id == check_brick_id:
-        return False
-    z = min(brick.start.z, brick.end.z)
-    if z == 1:
-        return False
-    if brick.start.z != brick.end.z:
-        below_brick_id = grid.get((brick.start.x, brick.start.y, z - 1))
-        return below_brick_id in [None, check_brick_id]
-    else:
-        for x, y, z in get_cubes(bricks, brick.brick_id):
-            below_brick_id = grid.get((x, y, z - 1))
-            if below_brick_id not in [None, check_brick_id]:
-                return False
-        return True
-
-
-def get_falling_bricks(
-    grid: dict[tuple[int, int, int] : int],
-    bricks: list[Brick],
-    check_brick_id: int = -1,
-) -> set[int]:
-    falling_brick_ids = set()
-    max_z = max(z for _, _, z in grid.keys())
-    if check_brick_id == -1:
-        min_z = 1
-    else:
-        min_z = max(bricks[check_brick_id].start.z, bricks[check_brick_id].end.z) + 1
-    for z in range(min_z, max_z + 1):
-        current_bricks = [
-            brick for brick in bricks if z in [brick.start.z, brick.end.z]
-        ]
-        for brick in current_bricks:
-            if is_falling(grid, bricks, brick, check_brick_id):
-                falling_brick_ids.add(brick.brick_id)
-                for x, y, z in get_cubes(bricks, brick.brick_id):
-                    del grid[(x, y, z)]
-                    grid[(x, y, z - 1)] = brick.brick_id
-                if check_brick_id == -1:
-                    brick.start = Cube(brick.start.x, brick.start.y, brick.start.z - 1)
-                    brick.end = Cube(brick.end.x, brick.end.y, brick.end.z - 1)
-    return falling_brick_ids
-
-
-def drop_layers(grid: dict[tuple[int, int, int]], bricks: list[Brick]) -> None:
-    while len(get_falling_bricks(grid, bricks)) > 0:
-        pass
-
-
-def get_removable_bricks(grid: dict[tuple[int, int, int]], bricks: list[Brick]) -> int:
-    removable_bricks = 0
-    for brick in bricks:
-        grid_copy = grid.copy()
-        falling_brick_ids = get_falling_bricks(grid, bricks, brick.brick_id)
-        if len(falling_brick_ids) == 0:
-            removable_bricks += 1
-        grid = grid_copy
-    return removable_bricks
-
-
-def handle_input(input: str) -> (dict[tuple[int, int, int] : int], list[Brick]):
+# Adapted from https://github.com/MeisterLLD/aoc2023/blob/main/22.py
+def handle_input(input: str) -> list[tuple[tuple[int, int, int], tuple[int, int, int]]]:
     f = open(input, "r")
     snapshot = f.read()
     f.close()
     bricks = []
-    grid = dict()
     for line in snapshot.split("\n"):
         start, end = line.split("~")
-        brick_start = Cube(*[int(coord) for coord in start.split(",")])
-        brick_end = Cube(*[int(coord) for coord in end.split(",")])
-        brick = Brick(brick_start, brick_end, len(bricks))
-        bricks.append(brick)
-        for x, y, z in get_cubes(bricks, brick.brick_id):
-            grid[(x, y, z)] = brick.brick_id
-    return grid, bricks
+        x1, y1, z1 = (int(coord) for coord in start.split(","))
+        x2, y2, z2 = (int(coord) for coord in end.split(","))
+        bricks.append(((x1, y1, z1), (x2, y2, z2)))
+        bricks = sorted(bricks, key=lambda x: x[0][2])
+    return bricks
+
+
+def get_tiles(
+    brick: tuple[tuple[int, int, int], tuple[int, int, int]]
+) -> list[tuple[int, int, int]]:
+    start, end = brick
+
+    if start[0] != end[0]:
+        return [(x, start[1], start[2]) for x in range(start[0], end[0] + 1)]
+    if start[1] != end[1]:
+        return [(start[0], y, start[2]) for y in range(start[1], end[1] + 1)]
+    if start[2] != end[2]:
+        return [(start[0], start[1], z) for z in range(start[2], end[2] + 1)]
+    return [start]
+
+
+def can_fall(
+    brick: tuple[tuple[int, int, int], tuple[int, int, int]],
+    occupied_spaces: set[tuple[int, int, int]],
+) -> bool:
+    return all(tile not in occupied_spaces for tile in get_tiles(brick))
+
+
+def get_settled_bricks(
+    bricks: list[tuple[tuple[int, int, int], tuple[int, int, int]]]
+) -> (
+    list[tuple[tuple[int, int, int], tuple[int, int, int]]],
+    set[tuple[int, int, int]],
+):
+    new_bricks = []
+    occupied_spaces = set()
+    for brick in bricks:
+        start, end = brick
+        x1, y1, z1 = start
+        x2, y2, z2 = end
+        while (
+            can_fall(((x1, y1, z1 - 1), (x2, y2, z2 - 1)), occupied_spaces)
+            and z1 - 1 >= 1
+        ):
+            z1 -= 1
+            z2 -= 1
+        new_brick = ((x1, y1, z1), (x2, y2, z2))
+        new_bricks.append(new_brick)
+        for tile in get_tiles(new_brick):
+            occupied_spaces.add(tile)
+        new_bricks = sorted(new_bricks, key=lambda x: x[0][2])
+    return new_bricks, occupied_spaces
+
+
+def supports(
+    brick_1: tuple[tuple[int, int, int], tuple[int, int, int]],
+    brick_2: tuple[tuple[int, int, int], tuple[int, int, int]],
+) -> bool:
+    for tile in get_tiles(brick_1):
+        x, y, z = tile
+        if (x, y, z + 1) in get_tiles(brick_2):
+            return True
+    return False
+
+
+def get_disintegration_graph(
+    bricks: tuple[tuple[int, int, int], tuple[int, int, int]]
+) -> dict[int:int]:
+    parents = {i: [] for i in range(len(bricks))}
+    children = {i: [] for i in range(len(bricks))}
+    disintegration_graph = {i: [] for i in range(len(bricks))}
+    for i, brick_1 in enumerate(bricks):
+        for j, brick_2 in enumerate(bricks):
+            if brick_2[0][2] > brick_1[1][2] + 1:
+                break
+            if j > i and supports(brick_1, brick_2):
+                parents[j].append(i)
+                children[i].append(j)
+    for i in range(len(bricks)):
+        for j in range(len(bricks)):
+            # Get the blocks that are only supported by exactly 1 other block
+            if parents[j] == [i]:
+                disintegration_graph[i].append(j)
+    return disintegration_graph
 
 
 if __name__ == "__main__":
-    grid, bricks = handle_input("puzzle input.txt")
-    drop_layers(grid, bricks)
-    removable_bricks = get_removable_bricks(grid, bricks)
-    # TODO Find a faster method
-    print(f"Part 1: {removable_bricks}")
+    bricks = handle_input("puzzle input.txt")
+    settled_bricks, occupied_spaces = get_settled_bricks(bricks)
+    disintegration_graph = get_disintegration_graph(settled_bricks)
+    print(f"Part 1: {sum(disintegration_graph[i] == [] for i in range(len(bricks)))}")
