@@ -57,11 +57,13 @@ def get_vertices(
                     vertices.add(tile)
     return vertices
 
+
 # https://github.com/derailed-dash/Advent-of-Code/blob/master/src/AoC_2023/Dazbo's_Advent_of_Code_2023.ipynb
 def build_edges(
     grid: list[list[Tile]],
     directions: dict[str, list[tuple[int, int]]],
     vertices: set[Tile],
+    part_one: bool = True,
 ) -> dict[Tile, set[Tile]]:
     edges = {vertex: set() for vertex in vertices}
     for vertex in vertices:
@@ -83,10 +85,11 @@ def build_edges(
                         ):
                             edges[vertex].add((grid[next_y][next_x], distance + 1))
                             continue
-                        if grid[next_y][next_x].val != "." and directions[
-                            grid[next_y][next_x].val
-                        ] != [(x, y)]:
-                            continue
+                        if part_one:
+                            if grid[next_y][next_x].val != "." and directions[
+                                grid[next_y][next_x].val
+                            ] != [(x, y)]:
+                                continue
                         queue.append((grid[next_y][next_x], distance + 1))
     return edges
 
@@ -96,7 +99,7 @@ def get_paths(
     end: Tile,
     grid: list[list[Tile]],
     edges: dict[Tile, set[Tile, int]],
-    visited: set[Tile] = set()
+    visited: set[Tile] = set(),
 ) -> None:
     if current == end:
         return [0]
@@ -150,3 +153,7 @@ if __name__ == "__main__":
     edges = build_edges(grid, directions, vertices)
     path_lengths = get_paths(start, end, grid, edges)
     print(f"Part 1: {max(path_lengths)}")
+
+    p2_edges = build_edges(grid, directions, vertices, part_one=False)
+    p2_lengths = get_paths(start, end, grid, p2_edges)
+    print(f"Part 2: {max(p2_lengths)}")
