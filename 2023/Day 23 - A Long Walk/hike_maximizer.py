@@ -154,6 +154,7 @@ if __name__ == "__main__":
     path_lengths = get_paths(start, end, grid, edges)
     print(f"Part 1: {max(path_lengths)}")
 
+    # TODO: Make this more efficient
     p2_edges = build_edges(grid, directions, vertices, part_one=False)
     p2_lengths = get_paths(start, end, grid, p2_edges)
     print(f"Part 2: {max(p2_lengths)}")

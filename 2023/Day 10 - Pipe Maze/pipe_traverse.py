@@ -175,6 +175,7 @@ def get_interior_points(area: int, boundary_points: int) -> int:
 if __name__ == "__main__":
     maze = get_maze("./puzzle input.txt")
     pipes = maze.pipes
+    # TODO: Make this more efficient
     # since connections can only make right-angle turns, there have to be an even number of pipes
     # So the furthest pipe will be the half-way point of the loop.
     print(f"Part 1: {len(pipes)/2}")
