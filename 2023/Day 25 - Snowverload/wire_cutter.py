@@ -43,3 +43,4 @@ if __name__ == "__main__":
     graph = get_graph(g_dict)
     partitions = get_disjoint_partitions(graph, 3)
     print(f"Part 1: {prod(len(partition) for partition in partitions)}")
+    print("Part 2: You supply all fifty stars and restart global snow production!")
