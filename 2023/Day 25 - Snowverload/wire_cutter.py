@@ -11,6 +11,7 @@ from math import prod
 # set our weights to 1 to get the number of specific cuts
 #
 # The nx package appears to use the Dinic's algorithm.
+# https://www.hackerearth.com/practice/algorithms/graphs/maximum-flow/tutorial/
 # Figure out the maximal flow. THe edges that experience their own flow max
 # are the ones that are cut to create the two disjoints.
 def handle_input(input: str) -> dict[str, list[str]]:
