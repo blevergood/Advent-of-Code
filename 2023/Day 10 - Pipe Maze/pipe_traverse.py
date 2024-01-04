@@ -89,7 +89,7 @@ class Maze:
         Part 1
         
         We know from the examples and the puzzle input that the
-        Starting node `S` will only have two characters that it's compatible
+        Starting node `S` will only have two characters with which it's compatible
         (i.e. it's either on an edge or surrounded on left/right by `|` characters
         etc.)
 
