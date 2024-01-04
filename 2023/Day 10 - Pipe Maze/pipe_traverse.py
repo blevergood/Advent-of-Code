@@ -40,24 +40,28 @@ class Pipe:
         if isinstance(other, Pipe):
             return (
                 (
+                    # Left-to-Right
                     other.x == self.x - 1
                     and other.y == self.y
                     and (-1, 0) in self.dirs
                     and (1, 0) in other.dirs
                 )
                 or (
+                    # Right-to-Left
                     other.x == self.x + 1
                     and other.y == self.y
                     and (1, 0) in self.dirs
                     and (-1, 0) in other.dirs
                 )
                 or (
+                    # Up-to-Down
                     other.y == self.y - 1
                     and other.x == self.x
                     and (0, -1) in self.dirs
                     and (0, 1) in other.dirs
                 )
                 or (
+                    # Down-to-Up
                     other.y == self.y + 1
                     and other.x == self.x
                     and (0, 1) in self.dirs
@@ -72,9 +76,9 @@ class Maze:
     def __init__(
         self, dimensions: dict[str, int], pipes: dict[int, list[Pipe]]
     ) -> None:
-        self.pipes: list[pipes] = []
+        self.pipes = []
         self.dimensions = dimensions
-        self.start: Pipe = None
+        self.start = None
         for key in pipes.keys():
             self.start = next((x for x in pipes[key] if x.value == "S"), None)
             if self.start is not None:
@@ -86,8 +90,8 @@ class Maze:
         
         We know from the examples and the puzzle input that the
         Starting node `S` will only have two characters that it's compatible
-        i.e. it's either on an edge or surrounded on left/right by `|` characters
-        etc.
+        (i.e. it's either on an edge or surrounded on left/right by `|` characters
+        etc.)
 
         So we just have to find the first compatible node and then move forward.
         Every other character can only move two ways, so if we know which of those ways
@@ -138,7 +142,7 @@ def get_maze(input: str) -> Maze:
 # Shoelace/Guass's area formula: https://en.wikipedia.org/wiki/Shoelace_formula
 # Simplified: https://www.101computing.net/the-shoelace-algorithm/
 # Calculates the area of a 2D shape based on the coordinates of the points (provided in order)
-def get_area(ordered_points: list[Pipe]) -> int:
+def get_area(ordered_points: list[Pipe]) -> float:
     return (
         abs(
             sum(
@@ -163,7 +167,7 @@ def get_area(ordered_points: list[Pipe]) -> int:
 # Picks Theorem: https://en.wikipedia.org/wiki/Pick%27s_theorem
 # Relates the number of internal points (i.e. on a graph-paper) inside a shape
 # to the shape's area and the number of external points
-def get_interior_points(area: int, boundary_points: int) -> int:
+def get_interior_points(area: int, boundary_points: int) -> float:
     return area - (boundary_points / 2) + 1
 
 
@@ -175,6 +179,4 @@ if __name__ == "__main__":
     # So the furthest pipe will be the half-way point of the loop.
     print(f"Part 1: {len(pipes)/2}")
 
-    print(
-        f"Part 2: {get_interior_points(get_area(pipes), len(pipes))}"
-    )
+    print(f"Part 2: {get_interior_points(get_area(pipes), len(pipes))}")
