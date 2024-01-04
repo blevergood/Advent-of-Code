@@ -176,6 +176,20 @@ if __name__ == "__main__":
     maze = get_maze("./puzzle input.txt")
     pipes = maze.pipes
     # TODO: Make this more efficient
+    # TODO:     Specifically, other than S, we know that a character should only have 2 directions to check
+    # TODO:     based on the character
+    # TODO:     Further, since we know the previous character, we can just grab the next one
+    # TODO:     That will allow us to do the straight traversal around the loop
+    # TODO:     And we can remove the traversal order step from p2
+
+    # The above works because our input happens to only have 2 proper connections
+    # Even though we start on an S
+
+    # To more generalize this, we would set up a back-tracking condition so if we
+    # go back to start if we can't move forward on a given tile
+
+    # Using TODO for all of the above lines because my vscode highlights it.
+    
     # since connections can only make right-angle turns, there have to be an even number of pipes
     # So the furthest pipe will be the half-way point of the loop.
     print(f"Part 1: {len(pipes)/2}")
