@@ -2,6 +2,7 @@
 import re
 from itertools import combinations
 from functools import cache
+from time import time
 
 
 def process_input(input: str) -> (list[str], list[int]):
@@ -66,12 +67,15 @@ def match_sequences(
 
 
 # Part 2 - Dynamic Programming
-# I don't have experience with dynamic programming so I'm using
+# I don't have experience with dynamic programming so I used this
+# For my first attempt at the solution
 # https://github.com/fuglede/adventofcode/blob/master/2023/day12/solutions.py
 #  Can be used for Part 1 as well, but I want to keep my own solution for reference above
 #  Uses recursion and caching to adjust for the large string sizes and combinations
 @cache
-def num_matches(row: str, sequence: list[int], num_contiguous: int = 0) -> [int]:
+def string_crawl_num_matches(
+    row: str, sequence: list[int], num_contiguous: int = 0
+) -> [int]:
     if not row:
         return not sequence and not num_contiguous
     matches = 0
@@ -94,6 +98,50 @@ def num_matches(row: str, sequence: list[int], num_contiguous: int = 0) -> [int]
     return matches
 
 
+# Ultimate solution:
+# Wanted a more efficient version and found this
+# https://gist.github.com/Nathan-Fenner/781285b77244f06cf3248a04869e7161
+# Basic advantage is that it looks ahead and ends a match-sequence as soon as it is impossible
+# rather than crawling through every character of the strings
+@cache
+def num_matches(row: str, sequence: list[int]) -> [int]:
+    # If we're done with a row, but still have a sequence that hasn't been matched, that's a zero
+    if not row:
+        # But if we're done with both a row and set of sequences, that means we've matched the pattern, thats a one
+        if not sequence:
+            return 1
+        return 0
+    # If we've it a match, but there are still more `#` in the string, we don't actually have a match
+    # but if there aren't, that's a full match
+    if not sequence:
+        for tile in row:
+            if tile == "#":
+                return 0
+        return 1
+
+    # If there aren't enough characters left in the process to make the pattern work, it's a zero already
+    if len(row) < sum(sequence) + len(sequence) - 1:
+        # line is not long enough for all of the runs
+        return 0
+    # standard "not in a pattern" case, just move on
+    if row[0] == ".":
+        return num_matches(row[1:], sequence)
+    # If we find a match, lets just do a quick forward look rather than doing a whole recursion
+    if row[0] == "#":
+        s = sequence[0]
+        for i in range(s):
+            # If we see dots ahead, no match
+            if i < len(row) and row[i] == ".":
+                return 0
+            # If we see `#` directly after of where the sequence is supposed to end, no match
+        if s < len(row) and row[s] == "#":
+            return 0
+        # Otherwise, we have a match, begin evaluating the next sequence
+        return num_matches(row[s + 1 :], sequence[1:])
+    # This is our question-mark case, just make two calls to the function for each option
+    return num_matches("#" + row[1:], sequence) + num_matches("." + row[1:], sequence)
+
+
 if __name__ == "__main__":
     rows, sequences = process_input("./puzzle input.txt")
     # OG Part 1
@@ -102,15 +150,11 @@ if __name__ == "__main__":
     # print(f"Part 1: {sum(matches)}")
 
     # Redone Part 1
-    matches_recursive = [
-        num_matches(rows[i] + ".", sequences[i]) for i in range(len(rows))
-    ]
+    matches_recursive = [num_matches(rows[i], sequences[i]) for i in range(len(rows))]
     print(f"Part 1: {sum(matches_recursive)}")
 
     # Part 2
-    # TODO: Make this more efficient
     matches_unfolded = [
-        num_matches("?".join([rows[i]] * 5) + ".", sequences[i] * 5)
-        for i in range(len(rows))
+        num_matches("?".join([rows[i]] * 5), sequences[i] * 5) for i in range(len(rows))
     ]
     print(f"Part 2: {sum(matches_unfolded)}")
