@@ -2,7 +2,6 @@
 import re
 from itertools import combinations
 from functools import cache
-from time import time
 
 
 def process_input(input: str) -> (list[str], list[int]):
