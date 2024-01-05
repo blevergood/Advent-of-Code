@@ -148,7 +148,7 @@ if __name__ == "__main__":
     # matches = match_sequences(possible_strings, sequences)
     # print(f"Part 1: {sum(matches)}")
 
-    # Redone Part 1
+    # Part 1
     matches_recursive = [num_matches(rows[i], sequences[i]) for i in range(len(rows))]
     print(f"Part 1: {sum(matches_recursive)}")
 
