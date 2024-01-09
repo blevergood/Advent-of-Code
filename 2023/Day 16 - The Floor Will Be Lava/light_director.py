@@ -95,31 +95,29 @@ def traverse_floor(
     # Account for starting on a tile that isn't a `.`
     start_tiles = turn(grid, start)
     queue = [s for s in start_tiles]
-    seen = set([tuple([*s[:2], dirs[s[2:]]]) for s in start_tiles])
+    seen = {(*s[:2],) for s in start_tiles}
     while queue:
         # Get vertex
         x, y, dx, dy = queue.pop(0)
         if dirs[(dx, dy)] not in vertices[(x, y)]:
             continue
         new_x, new_y = vertices[(x, y)][dirs[(dx, dy)]]
-        if dy > 0:
-            for i in range(y, new_y):
-                mid = (x, i, dirs[(dx, dy)])
+        if dy != 0:
+            if dy > 0:
+                y_range = range(y, new_y)
+            elif dy < 0:
+                y_range = reversed(range(new_y + 1, y))
+            for i in y_range:
+                mid = (x, i)
                 if mid not in seen:
                     seen.add(mid)
-        elif dy < 0:
-            for i in reversed(range(new_y + 1, y)):
-                mid = (x, i, dirs[(dx, dy)])
-                if mid not in seen:
-                    seen.add(mid)
-        if dx > 0:
-            for i in range(x, new_x):
-                mid = (i, y, dirs[(dx, dy)])
-                if mid not in seen:
-                    seen.add(mid)
-        elif dx < 0:
-            for i in reversed(range(new_x + 1, x)):
-                mid = (i, y, dirs[(dx, dy)])
+        if dx != 0:
+            if dx > 0:
+                x_range = range(x, new_x)
+            elif dx < 0:
+                x_range = reversed(range(new_x + 1, x))
+            for i in x_range:
+                mid = (i, y)
                 if mid not in seen:
                     seen.add(mid)
         next_tiles = turn(grid, (new_x, new_y, dx, dy))
@@ -129,7 +127,7 @@ def traverse_floor(
             if vertex not in seen:
                 queue.append(tile)
                 seen.add(vertex)
-    visited = {(x, y) for (x, y, _) in seen}
+    visited = {(*s[:2],) for s in seen}
     return visited
 
 
