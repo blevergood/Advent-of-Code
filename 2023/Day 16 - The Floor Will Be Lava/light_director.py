@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import re
+
+
 def handle_input(input: str) -> list[str]:
     f = open(input, "r")
     grid = f.read().split("\n")
@@ -9,49 +12,147 @@ def handle_input(input: str) -> list[str]:
 def get_border_beams(grid: list[str]) -> set[tuple[int, int, int, int]]:
     border_beams = set()
     for y in range(len(grid)):
-        border_beams.update({(-1, y, 1, 0), (len(grid[0]), y, -1, 0)})
+        border_beams.update({(0, y, 1, 0), (len(grid[0]) - 1, y, -1, 0)})
     for x in range(len(grid[0])):
-        border_beams.update({(x, -1, 0, 1), (x, len(grid), 0, -1)})
+        border_beams.update({(x, 0, 0, 1), (x, len(grid) - 1, 0, -1)})
     return border_beams
 
 
-def traverse_floor(
-    grid: list[str], start: tuple[int, int, int, int]
-) -> set[tuple[int, int]]:
-    queue = [start]
-    seen = set()
-
-    while queue:
-        x, y, dx, dy = queue.pop(0)
-        x += dx
-        y += dy
-        if 0 <= y < len(grid) and 0 <= x < len(grid[0]):
-            new_pos = grid[y][x]
-            if (new_pos == "-" and dy != 0) or (new_pos == "|" and dx != 0):
-                for d_x, d_y in (
-                    [(0, 1), (0, -1)] if new_pos == "|" else [(1, 0), (-1, 0)]
-                ):
-                    if (x, y, d_x, d_y) not in seen:
-                        queue.append((x, y, d_x, d_y))
-                        seen.add((x, y, d_x, d_y))
+# Create a list of vertices and edges so that we only have edges and special characters
+# Each vertex is of the format: {tuple[int, int]: dict[str, tuple[int, int]}
+# Where each tuple is a "decision tile" coordinate, and the `str` entries for each vertex is "top," "right", "bottom", "left" as long as those edges exist
+# so that we can jump between points where we have to make decisions, rather than crawling through all points
+# "|.../" -> {(0, 0): {"right": (0, 5)}} etc.
+def compress_floor(
+    grid: list[str],
+) -> dict[tuple[int, int], dict[str, tuple[int, int]]]:
+    vertices = {
+        (x, y): dict()
+        for y in range(len(grid))
+        for x in range(len(grid[y]))
+        if grid[y][x] != "."
+        or (x == 0 or x == len(grid[0]) - 1)
+        or (y == 0 or y == len(grid) - 1)
+    }
+    for x, y in vertices.keys():
+        if x < len(grid) - 1:
+            right = re.search(r"[^.-]", grid[y][x + 1 :])
+            if right is None:
+                right = len(grid) - 1
             else:
-                if new_pos == "\\":
-                    dx, dy = dy, dx
-                elif new_pos == "/":
-                    dx, dy = -dy, -dx
+                right = right.start() + x + 1
+            vertices[(x, y)]["right"] = (right, y)
+        if x > 0:
+            left = re.search(r"[^.-]", "".join(reversed(grid[y][:x])))
+            if left is None:
+                left = 0
+            else:
+                left = x - left.start() - 1
+            vertices[(x, y)]["left"] = (left, y)
+        if y < len(grid) - 1:
+            lower = ("").join(grid[i][x] for i in range(y + 1, len(grid)))
+            bottom = re.search(r"[^.|]", lower)
+            if bottom is None:
+                bottom = len(grid) - 1
+            else:
+                bottom = bottom.start() + y + 1
+            vertices[(x, y)]["bottom"] = (x, bottom)
+        if y > 0:
+            upper = "".join([grid[y - i][x] for i in range(1, y)])
+            top = re.search(r"[^.|]", upper)
+            if top is None:
+                top = 0
+            else:
+                top = y - top.start() - 1
+            vertices[(x, y)]["top"] = (x, top)
+    return vertices
 
-                if (x, y, dx, dy) not in seen:
-                    queue.append((x, y, dx, dy))
-                    seen.add((x, y, dx, dy))
-    visited = {(x, y) for (x, y, _, _) in seen}
+
+def turn(
+    grid: list[str], start: tuple[int, int, int, int]
+) -> tuple[int, int, int, int]:
+    next_tiles = []
+    x, y, dx, dy = start
+    pos = grid[y][x]
+    if (pos == "-" and dy != 0) or (pos == "|" and dx != 0):
+        for d_x, d_y in [(0, 1), (0, -1)] if pos == "|" else [(1, 0), (-1, 0)]:
+            next_tiles.append((x, y, d_x, d_y))
+    else:
+        if pos == "\\":
+            dx, dy = dy, dx
+        elif pos == "/":
+            dx, dy = -dy, -dx
+        next_tiles.append((x, y, dx, dy))
+    return next_tiles
+
+
+def traverse_floor(
+    grid: list[str],
+    vertices: dict[tuple[int, int], dict[str, tuple[int, int]]],
+    start: tuple[int, int, int, int],
+) -> set[tuple[int, int]]:
+    dirs = {(0, -1): "top", (1, 0): "right", (0, 1): "bottom", (-1, 0): "left"}
+    # Account for starting on a tile that isn't a `.`
+    start_tiles = turn(grid, start)
+    queue = [s for s in start_tiles]
+    seen = set([tuple([*s[:2], dirs[s[2:]]]) for s in start_tiles])
+    while queue:
+        # Get vertex
+        x, y, dx, dy = queue.pop(0)
+        if dirs[(dx, dy)] not in vertices[(x, y)]:
+            continue
+        new_x, new_y = vertices[(x, y)][dirs[(dx, dy)]]
+        if dy > 0:
+            for i in range(y, new_y):
+                mid = (x, i, dirs[(dx, dy)])
+                if mid not in seen:
+                    seen.add(mid)
+        elif dy < 0:
+            for i in reversed(range(new_y + 1, y)):
+                mid = (x, i, dirs[(dx, dy)])
+                if mid not in seen:
+                    seen.add(mid)
+        if dx > 0:
+            for i in range(x, new_x):
+                mid = (i, y, dirs[(dx, dy)])
+                if mid not in seen:
+                    seen.add(mid)
+        elif dx < 0:
+            for i in reversed(range(new_x + 1, x)):
+                mid = (i, y, dirs[(dx, dy)])
+                if mid not in seen:
+                    seen.add(mid)
+        next_tiles = turn(grid, (new_x, new_y, dx, dy))
+        for tile in next_tiles:
+            x, y, dx, dy = tile
+            vertex = (x, y, dirs[(dx, dy)])
+            if vertex not in seen:
+                queue.append(tile)
+                seen.add(vertex)
+    visited = {(x, y) for (x, y, _) in seen}
     return visited
+
+
+# Fun visualization function to create traversals like from the example
+def visualize(file, grid, visited):
+    for x, y in visited:
+        row_list = list(grid[y])
+        row_list[x] = "#"
+        grid[y] = "".join(row_list)
+    f = open(f"visualization_{file}", "w+")
+    for line in grid:
+        f.write(f"{line}\n")
+    f.close()
 
 
 if __name__ == "__main__":
     grid = handle_input("puzzle input.txt")
-    visited = traverse_floor(grid, (-1, 0, 1, 0))
+    vertices = compress_floor(grid)
+    visited = traverse_floor(grid, vertices, (0, 0, 1, 0))
     print(f"Part 1: {len(visited)}")
 
+    # visualize("example.txt", grid, visited)
+
     border_beams = get_border_beams(grid)
-    all_visited = [len(traverse_floor(grid, start)) for start in border_beams]
+    all_visited = [len(traverse_floor(grid, vertices, start)) for start in border_beams]
     print(f"Part 2: {max(all_visited)}")
