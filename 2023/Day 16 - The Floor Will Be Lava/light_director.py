@@ -25,7 +25,10 @@ def get_border_beams(grid: list[str]) -> set[tuple[int, int, int, int]]:
 # "|.../" -> {(0, 0): {"right": (0, 5)}} etc.
 def compress_floor(
     grid: list[str],
-) -> dict[tuple[int, int], dict[str, tuple[int, int]]]:
+) -> dict[tuple[int, int], dict[tuple[int, int], tuple[int, int]]]:
+    # dirs = {(0, -1): "top", (1, 0): "right", (0, 1): "bottom", (-1, 0): "left"}
+    
+    # a `vertex` is (`/`, `\`, `-`, `|`) tiles & border tiles (which can be `.` tiles)
     vertices = {
         (x, y): dict()
         for y in range(len(grid))
@@ -41,14 +44,14 @@ def compress_floor(
                 right = len(grid) - 1
             else:
                 right = right.start() + x + 1
-            vertices[(x, y)]["right"] = (right, y)
+            vertices[(x, y)][(1, 0)] = (right, y)
         if x > 0:
             left = re.search(r"[^.-]", "".join(reversed(grid[y][:x])))
             if left is None:
                 left = 0
             else:
                 left = x - left.start() - 1
-            vertices[(x, y)]["left"] = (left, y)
+            vertices[(x, y)][(-1, 0)] = (left, y)
         if y < len(grid) - 1:
             lower = ("").join(grid[i][x] for i in range(y + 1, len(grid)))
             bottom = re.search(r"[^.|]", lower)
@@ -56,7 +59,7 @@ def compress_floor(
                 bottom = len(grid) - 1
             else:
                 bottom = bottom.start() + y + 1
-            vertices[(x, y)]["bottom"] = (x, bottom)
+            vertices[(x, y)][(0, 1)] = (x, bottom)
         if y > 0:
             upper = "".join([grid[y - i][x] for i in range(1, y)])
             top = re.search(r"[^.|]", upper)
@@ -64,7 +67,7 @@ def compress_floor(
                 top = 0
             else:
                 top = y - top.start() - 1
-            vertices[(x, y)]["top"] = (x, top)
+            vertices[(x, y)][(0, -1)] = (x, top)
     return vertices
 
 
@@ -91,17 +94,18 @@ def traverse_floor(
     vertices: dict[tuple[int, int], dict[str, tuple[int, int]]],
     start: tuple[int, int, int, int],
 ) -> set[tuple[int, int]]:
-    dirs = {(0, -1): "top", (1, 0): "right", (0, 1): "bottom", (-1, 0): "left"}
+    # dirs = {(0, -1): "top", (1, 0): "right", (0, 1): "bottom", (-1, 0): "left"}
+
     # Account for starting on a tile that isn't a `.`
     start_tiles = turn(grid, start)
     queue = [s for s in start_tiles]
-    seen = {(*s[:2], dirs[s[2:]]) for s in start_tiles}
+    seen = {s for s in start_tiles}
     while queue:
         # Get vertex
         x, y, dx, dy = queue.pop(0)
-        if dirs[(dx, dy)] not in vertices[(x, y)]:
+        if (dx, dy) not in vertices[(x, y)]:
             continue
-        new_x, new_y = vertices[(x, y)][dirs[(dx, dy)]]
+        new_x, new_y = vertices[(x, y)][(dx, dy)]
         if dy != 0:
             if dy > 0:
                 y_range = range(y, new_y)
@@ -125,7 +129,7 @@ def traverse_floor(
         next_tiles = turn(grid, (new_x, new_y, dx, dy))
         for tile in next_tiles:
             x, y, dx, dy = tile
-            vertex = (x, y, dirs[(dx, dy)])
+            vertex = (x, y, dx, dy)
             if vertex not in seen:
                 queue.append(tile)
                 seen.add(vertex)
