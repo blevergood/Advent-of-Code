@@ -32,11 +32,10 @@ def get_border_beams(grid: list[str]) -> set[tuple[int, int, int, int]]:
 
 
 # Create a list of vertices and edges so that we only have edges and special characters
-# Also create a return cache for each edge
 # Each vertex is of the format: {(int, int): {(int, int): (int, int)}}
 #  Which translates to: `{coord: {dir: next_coord}}`
-# Where each tuple is a "decision tile" coordinate, and the `str` entries for each vertex is "top," "right", "bottom", "left" as long as those edges exist
-# so that we can jump between points where we have to make decisions, rather than crawling through all points
+# Where each tuple is a "decision tile" coordinate, and the dir entry directs to the next vertex as long as a given edge exists
+# so that we can jump between points where we have to make decisions, rather than making a decisions at every single point
 # e.g. "|.../" -> {(0, 0): {"right": (0, 5)}} etc.
 def compress_floor(
     grid: list[str],
@@ -165,6 +164,7 @@ def visualize(file, grid, visited):
 
 
 if __name__ == "__main__":
+    # TODO: Add multithreading (?)
     grid = handle_input("puzzle input.txt")
     vertices = compress_floor(grid)
     visited = traverse_floor(grid, vertices, (0, 0, 1, 0))
