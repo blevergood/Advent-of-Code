@@ -95,7 +95,7 @@ def traverse_floor(
     # Account for starting on a tile that isn't a `.`
     start_tiles = turn(grid, start)
     queue = [s for s in start_tiles]
-    seen = {(*s[:2],) for s in start_tiles}
+    seen = {(*s[:2], dirs[s[2:]]) for s in start_tiles}
     while queue:
         # Get vertex
         x, y, dx, dy = queue.pop(0)
@@ -108,6 +108,8 @@ def traverse_floor(
             elif dy < 0:
                 y_range = reversed(range(new_y + 1, y))
             for i in y_range:
+                # Performance improvement by checking midpoints against just
+                # the two points
                 mid = (x, i)
                 if mid not in seen:
                     seen.add(mid)
