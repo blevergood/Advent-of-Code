@@ -11,23 +11,38 @@ def handle_input(input: str) -> list[str]:
 
 def get_border_beams(grid: list[str]) -> set[tuple[int, int, int, int]]:
     border_beams = set()
-    for y in range(len(grid)):
-        border_beams.update({(0, y, 1, 0), (len(grid[0]) - 1, y, -1, 0)})
-    for x in range(len(grid[0])):
-        border_beams.update({(x, 0, 0, 1), (x, len(grid) - 1, 0, -1)})
+    # Only iterate through 1 dimension if we have a square
+    if len(grid) == len(grid[0]):
+        for i in range(len(grid)):
+            border_beams.update(
+                {
+                    (i, 0, 0, 1),
+                    (i, len(grid) - 1, 0, -1),
+                    (0, i, 1, 0),
+                    (len(grid[0]) - 1, i, -1, 0),
+                }
+            )
+    # Otherwise have to do a separate loop for each dimension
+    else:
+        for y in range(len(grid)):
+            border_beams.update({(0, y, 1, 0), (len(grid[0]) - 1, y, -1, 0)})
+        for x in range(len(grid[0])):
+            border_beams.update({(x, 0, 0, 1), (x, len(grid) - 1, 0, -1)})
     return border_beams
 
 
 # Create a list of vertices and edges so that we only have edges and special characters
-# Each vertex is of the format: {tuple[int, int]: dict[str, tuple[int, int]}
+# Also create a return cache for each edge
+# Each vertex is of the format: {(int, int): {(int, int): (int, int)}}
+#  Which translates to: `{coord: {dir: next_coord}}`
 # Where each tuple is a "decision tile" coordinate, and the `str` entries for each vertex is "top," "right", "bottom", "left" as long as those edges exist
 # so that we can jump between points where we have to make decisions, rather than crawling through all points
-# "|.../" -> {(0, 0): {"right": (0, 5)}} etc.
+# e.g. "|.../" -> {(0, 0): {"right": (0, 5)}} etc.
 def compress_floor(
     grid: list[str],
 ) -> dict[tuple[int, int], dict[tuple[int, int], tuple[int, int]]]:
     # dirs = {(0, -1): "top", (1, 0): "right", (0, 1): "bottom", (-1, 0): "left"}
-    
+
     # a `vertex` is (`/`, `\`, `-`, `|`) tiles & border tiles (which can be `.` tiles)
     vertices = {
         (x, y): dict()
