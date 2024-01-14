@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import re
+from multiprocessing import Pool, cpu_count
 
 
 def handle_input(input: str) -> list[str]:
@@ -107,7 +108,7 @@ def traverse_floor(
     grid: list[str],
     vertices: dict[tuple[int, int], dict[str, tuple[int, int]]],
     start: tuple[int, int, int, int],
-) -> set[tuple[int, int]]:
+) -> int:
     # dirs = {(0, -1): "top", (1, 0): "right", (0, 1): "bottom", (-1, 0): "left"}
 
     # Account for starting on a tile that isn't a `.`
@@ -148,7 +149,7 @@ def traverse_floor(
                 queue.append(tile)
                 seen.add(vertex)
     visited = {(*s[:2],) for s in seen}
-    return visited
+    return len(visited)
 
 
 # Fun visualization function to create traversals like from the example
@@ -164,14 +165,16 @@ def visualize(file, grid, visited):
 
 
 if __name__ == "__main__":
-    # TODO: Add multithreading (?)
     grid = handle_input("puzzle input.txt")
     vertices = compress_floor(grid)
     visited = traverse_floor(grid, vertices, (0, 0, 1, 0))
-    print(f"Part 1: {len(visited)}")
+    print(f"Part 1: {visited}")
 
     # visualize("example.txt", grid, visited)
 
     border_beams = get_border_beams(grid)
-    all_visited = [len(traverse_floor(grid, vertices, start)) for start in border_beams]
-    print(f"Part 2: {max(all_visited)}")
+    args = [(grid, vertices, start) for start in border_beams]
+    with Pool(cpu_count()) as p:
+        all_visited = p.starmap_async(traverse_floor, args)
+        paths = all_visited.get()
+    print(f"Part 2: {max(paths)}")
