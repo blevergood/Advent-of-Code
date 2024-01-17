@@ -65,7 +65,7 @@ def get_total_approved(
     workflows_str: str, workflows: dict[str, Callable[[dict[str, int]], str]]
 ) -> int:
     # Get all the ranges addressed by the functions
-    splits = {part_category: [1, 4000] for part_category in "xmas"}
+    splits = {category: [0, 4000] for category in "xmas"}
     for category, operator, value in re.findall(r"(\w+)(<|>)(\d+)", workflows_str):
         splits[category].append(int(value) - (operator == "<"))
 
