@@ -94,13 +94,34 @@ def build_edges(
     return edges
 
 
+# Idea from: https://www.reddit.com/r/adventofcode/comments/18oy4pc/comment/kgf4iy9/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+def direct_perimeter(
+    edges: dict[Tile, set[Tile]], start: Tile
+) -> dict[Tile, set[Tile]]:
+    visited = set()
+    queue = [start]
+    while len(queue) > 0:
+        tile = queue.pop(0)
+        for path in edges[tile]:
+            if len(edges[path[0]]) < 4 and path[0] not in visited:
+                to_remove = set()
+                queue.append(path[0])
+                for p in edges[path[0]]:
+                    if tile in p:
+                        to_remove.add(p)
+                        break
+                edges[path[0]] -= to_remove
+        visited.add(tile)
+    return edges
+
+
 def get_paths(
     current: Tile,
     end: Tile,
     grid: list[list[Tile]],
     edges: dict[Tile, set[Tile, int]],
     visited: set[Tile] = set(),
-) -> None:
+) -> list[int]:
     if current == end:
         return [0]
     visited.add(current)
@@ -154,7 +175,8 @@ if __name__ == "__main__":
     path_lengths = get_paths(start, end, grid, edges)
     print(f"Part 1: {max(path_lengths)}")
 
-    # TODO: Make this more efficient
-    p2_edges = build_edges(grid, directions, vertices, part_one=False)
-    p2_lengths = get_paths(start, end, grid, p2_edges)
+    p2_edges = direct_perimeter(
+        build_edges(grid, directions, vertices, part_one=False), start
+    )
+    p2_lengths = get_paths(start, end, grid, p2_edges, set())
     print(f"Part 2: {max(p2_lengths)}")
